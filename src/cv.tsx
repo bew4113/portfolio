@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { 
-  Terminal, Server, Shield, Code, Database, Cpu, MapPin, Mail, Phone, 
-  Linkedin, Github, ExternalLink, ChevronRight, Menu, X, Award, BookOpen, 
-  Globe, Monitor, Lock, ArrowRight, CheckCircle, Send, Layers, User, Share2
+  Terminal, Server, Shield, Code, Database, MapPin, Mail, Phone, 
+  Linkedin, Github, Menu, X, Award, BookOpen, 
+  Lock, ArrowRight, Layers
 } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 // --- DATA SECTION (UPDATED FROM PDF & CV) ---
 const DATA = {
@@ -195,8 +196,6 @@ const TechMarquee = ({ items }: { items: string[] }) => {
     </div>
   );
 };
-
-import { LucideIcon } from 'lucide-react';
 
 interface SkillCardProps {
   title: string;
