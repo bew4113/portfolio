@@ -139,7 +139,7 @@ Monitoring:        Uptime Kuma, Custom Dashboards
 - 🐙 **GitHub:** [bew4113](https://github.com/bew4113)
 - 📧 **Email:** panupong.nijjaboon@gmail.com
 - 📱 **Phone:** 098-276-4341
-- 🌐 **Portfolio:** [View Live](https://portfolio-bew4113.vercel.app)
+- 🌐 **Portfolio:** [View Live](https://portfolio-panupong-nijjaboon.vercel.app/)
 
 ---
 
