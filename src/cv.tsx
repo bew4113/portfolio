@@ -173,7 +173,10 @@ const DATA = {
         th: "TEN FORWARD CO., LTD. | กรุงเทพฯ",
         en: "TEN FORWARD CO., LTD. | Bangkok"
       },
-      period: "Mar 2025 – Present",
+      period: {
+        th: "มี.ค. 2568 – ปัจจุบัน",
+        en: "Mar 2025 – Present"
+      },
       type: {
         th: "ตำแหน่งปัจจุบัน",
         en: "Current Role"
@@ -214,7 +217,10 @@ const DATA = {
         th: "Cybertron Company Limited | กรุงเทพฯ",
         en: "Cybertron Company Limited | Bangkok"
       },
-      period: "Aug 2024 – Feb 2025",
+      period: {
+        th: "ส.ค. 2567 – ก.พ. 2568",
+        en: "Aug 2024 – Feb 2025"
+      },
       type: {
         th: "ผู้เชี่ยวชาญ",
         en: "Specialist"
@@ -263,7 +269,10 @@ const DATA = {
         th: "Metro Systems Corporation (ประจำ PTT Digital) | กรุงเทพฯ",
         en: "Metro Systems Corporation (at PTT Digital) | Bangkok"
       },
-      period: "Aug 2023 – Jul 2024",
+      period: {
+        th: "ส.ค. 2566 – ก.ค. 2567",
+        en: "Aug 2023 – Jul 2024"
+      },
       type: {
         th: "นักวิเคราะห์",
         en: "Analyst"
@@ -300,7 +309,10 @@ const DATA = {
         th: "Acacia I.T. (ประจำสำนักงานใหญ่ธนาคารกรุงไทย) | กรุงเทพฯ",
         en: "Acacia I.T. (at Krungthai Bank HQ) | Bangkok"
       },
-      period: "Jan 2022 – Dec 2022",
+      period: {
+        th: "ม.ค. 2565 – ธ.ค. 2565",
+        en: "Jan 2022 – Dec 2022"
+      },
       type: {
         th: "สนับสนุนระบบ",
         en: "Support"
@@ -510,7 +522,7 @@ interface Project {
 interface ExperienceItem {
   role: LocalizedText;
   company: LocalizedText;
-  period: string;
+  period: LocalizedText;
   type: LocalizedText;
   highlights: LocalizedText[];
 }
@@ -566,6 +578,7 @@ const ProfileImage = ({ fallbackHint }: { fallbackHint: string }) => (
          src="/Panupong.jpg" 
          alt="Panupong Nijjaboon - Security Architect" 
          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+         style={{ objectPosition: 'center 18%' }}
          onError={(e) => {
            // Fallback if image not found
            const target = e.target as HTMLImageElement;
@@ -945,7 +958,7 @@ const App = () => {
                   <div className="absolute left-0 md:left-1/2 w-6 h-6 bg-slate-950 border-4 border-slate-700 rounded-full translate-y-1.5 md:-translate-x-1/2 md:translate-y-0 z-10 group-hover:border-cyan-500 group-hover:scale-125 transition-all duration-300"></div>
 
                   <div className={`hidden md:block w-1/2 text-slate-500 font-mono text-sm ${idx % 2 === 0 ? 'text-left' : 'text-right'}`}>
-                    {job.period}
+                    {t(job.period, lang)}
                   </div>
 
                   <div className="w-full md:w-1/2">
@@ -953,7 +966,7 @@ const App = () => {
                       <div className="absolute top-0 right-0 px-3 py-1 bg-slate-900 text-[10px] font-bold uppercase text-slate-500 rounded-bl-xl border-l border-b border-slate-800">
                         {t(job.type, lang)}
                       </div>
-                      <div className="md:hidden text-xs text-cyan-500 font-mono mb-2">{job.period}</div>
+                      <div className="md:hidden text-xs text-cyan-500 font-mono mb-2">{t(job.period, lang)}</div>
                       <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors font-heading">{t(job.role, lang)}</h3>
                       <div className="text-slate-400 font-medium mb-4 flex items-center gap-2 text-sm">
                         <MapPin size={14} /> {t(job.company, lang)}
