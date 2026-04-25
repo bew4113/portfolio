@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { 
   Terminal, Server, Shield, Code, Database, MapPin, Mail, Phone, 
   Linkedin, Github, Menu, X, Award, BookOpen, 
-  Lock, ArrowRight, Layers
+  Lock, ArrowRight, Layers, ArrowUp
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
@@ -47,20 +47,20 @@ const UI_COPY: Record<Lang, {
   th: {
     nav: ['หน้าหลัก', 'เกี่ยวกับ', 'ทักษะ', 'ประสบการณ์', 'โปรเจกต์'],
     mobileNav: ['หน้าหลัก', 'เกี่ยวกับ', 'ทักษะ', 'ประสบการณ์', 'โปรเจกต์', 'ติดต่อ'],
-    roleMini: 'System Engineer',
-    hireMe: 'ร่วมงานกับผม',
+    roleMini: 'วิศวกรระบบ',
+    hireMe: 'ติดต่อฉัน',
     availability: 'พร้อมรับโอกาสใหม่',
     heroTitleTop: 'เชื่อมงานความปลอดภัย',
-    heroTitleMid: 'Operations',
+    heroTitleMid: 'ปฏิบัติการ',
     heroTitleBottom: 'กับวิศวกรรมสมัยใหม่',
     heroDesc: 'System Engineer และ Security Architect ที่ออกแบบ data pipeline ประสิทธิภาพสูง, infrastructure ที่ปลอดภัย และแพลตฟอร์ม SIEM รุ่นใหม่สำหรับงานจริง',
-    viewArchitecture: 'ดูสถาปัตยกรรม',
-    contactMe: 'ติดต่อ',
-    chips: ['Cyber Security', 'Big Data Ops', 'Full Stack'],
+    viewArchitecture: 'ดูโครงสร้างระบบ',
+    contactMe: 'ติดต่อฉัน',
+    chips: ['ความปลอดภัยไซเบอร์', 'ปฏิบัติการข้อมูล', 'ฟูลสแตก'],
     about: 'เกี่ยวกับผม',
     technicalSkill: 'ทักษะเทคนิค',
     technicalSkillDesc: 'ความเชี่ยวชาญของผมครอบคลุมตั้งแต่ infrastructure ระดับลึกไปจนถึง application security ระดับระบบ',
-    skillTitles: ['Security Stack', 'Dev & Integration', 'Infrastructure & DB', 'System & Operations'],
+    skillTitles: ['สแต็กความปลอดภัย', 'พัฒนาและเชื่อมต่อ', 'โครงสร้างพื้นฐานและฐานข้อมูล', 'ระบบและการปฏิบัติการ'],
     journey: 'เส้นทางการทำงาน',
     projects: 'โปรเจกต์สำคัญ',
     projectsDesc: 'นวัตกรรมที่ใช้งานได้จริง',
@@ -79,7 +79,7 @@ const UI_COPY: Record<Lang, {
     nav: ['Home', 'About', 'Skills', 'Experience', 'Projects'],
     mobileNav: ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact'],
     roleMini: 'System Engineer',
-    hireMe: 'Hire Me',
+    hireMe: 'Contract Me',
     availability: 'AVAILABLE FOR NEW OPPORTUNITIES',
     heroTitleTop: 'Bridging Security',
     heroTitleMid: 'Operations',
@@ -165,86 +165,218 @@ const DATA = {
 
   experience: [
     {
-      role: "System Engineer",
-      company: "TEN FORWARD CO., LTD. | Bangkok",
+      role: {
+        th: "System Engineer",
+        en: "System Engineer"
+      },
+      company: {
+        th: "TEN FORWARD CO., LTD. | กรุงเทพฯ",
+        en: "TEN FORWARD CO., LTD. | Bangkok"
+      },
       period: "Mar 2025 – Present",
-      type: "Current Role",
+      type: {
+        th: "ตำแหน่งปัจจุบัน",
+        en: "Current Role"
+      },
       highlights: [
-        "SOC Platform Architecture: Engineered \"SOC AI\" SaaS platform using Next.js/Express.js, integrating real-time alert ingestion from CrowdStrike and Cortex XDR via APIs.",
-        "Microsoft Graph API Integration: Implemented Graph API across all core platforms (SOC AI, PMS) to enable Outlook Calendar Mapping and Active Directory (AD) authentication for automated scheduling and email notifications.",
-        "Automated Playbooks: Developed automated incident response logic within SOC AI, including Auto-isolate host functionality via API for rapid threat containment during Ransomware incidents.",
-        "Pre-sales Discovery: Utilized wafw00f to perform technical analysis on customer infrastructure to identify WAF solutions and security gaps, supporting sales strategies.",
-        "Log Architecture: Configured and managed CrowdStrike LogScale as a primary LogCollector to handle high-throughput enterprise security data.",
-        "Environment Management: Managed virtualization on VMware ESXi and containerized services on Docker, utilizing MinIO for object storage and PostgreSQL for data management."
+        {
+          th: "สถาปัตยกรรม SOC Platform: ออกแบบแพลตฟอร์ม \"SOC AI\" แบบ SaaS ด้วย Next.js/Express.js และเชื่อมต่อการรับแจ้งเตือนแบบเรียลไทม์จาก CrowdStrike และ Cortex XDR ผ่าน API",
+          en: "SOC Platform Architecture: Engineered \"SOC AI\" SaaS platform using Next.js/Express.js, integrating real-time alert ingestion from CrowdStrike and Cortex XDR via APIs."
+        },
+        {
+          th: "การเชื่อมต่อ Microsoft Graph API: นำ Graph API ไปใช้ในแพลตฟอร์มหลัก (SOC AI, PMS) เพื่อรองรับ Outlook Calendar Mapping และยืนยันตัวตนผ่าน Active Directory (AD) สำหรับงาน schedule และ email notification อัตโนมัติ",
+          en: "Microsoft Graph API Integration: Implemented Graph API across all core platforms (SOC AI, PMS) to enable Outlook Calendar Mapping and Active Directory (AD) authentication for automated scheduling and email notifications."
+        },
+        {
+          th: "Automated Playbooks: พัฒนา logic ตอบสนองเหตุการณ์อัตโนมัติใน SOC AI รวมถึงฟังก์ชัน Auto-isolate host ผ่าน API เพื่อควบคุมเหตุการณ์ Ransomware ได้รวดเร็ว",
+          en: "Automated Playbooks: Developed automated incident response logic within SOC AI, including Auto-isolate host functionality via API for rapid threat containment during Ransomware incidents."
+        },
+        {
+          th: "Pre-sales Discovery: ใช้ wafw00f วิเคราะห์โครงสร้างระบบลูกค้าเพื่อระบุโซลูชัน WAF ที่ใช้งานอยู่และช่องว่างด้านความปลอดภัย เพื่อสนับสนุนกลยุทธ์การขาย",
+          en: "Pre-sales Discovery: Utilized wafw00f to perform technical analysis on customer infrastructure to identify WAF solutions and security gaps, supporting sales strategies."
+        },
+        {
+          th: "Log Architecture: ติดตั้งและดูแล CrowdStrike LogScale เป็น LogCollector หลักเพื่อรองรับข้อมูลความปลอดภัยปริมาณสูงระดับองค์กร",
+          en: "Log Architecture: Configured and managed CrowdStrike LogScale as a primary LogCollector to handle high-throughput enterprise security data."
+        },
+        {
+          th: "Environment Management: ดูแลระบบเสมือนบน VMware ESXi และบริการแบบคอนเทนเนอร์บน Docker พร้อมใช้งาน MinIO สำหรับ object storage และ PostgreSQL สำหรับการจัดการข้อมูล",
+          en: "Environment Management: Managed virtualization on VMware ESXi and containerized services on Docker, utilizing MinIO for object storage and PostgreSQL for data management."
+        }
       ]
     },
     {
-      role: "Cybersecurity Analyst",
-      company: "Cybertron Company Limited | Bangkok",
+      role: {
+        th: "Cybersecurity Analyst",
+        en: "Cybersecurity Analyst"
+      },
+      company: {
+        th: "Cybertron Company Limited | กรุงเทพฯ",
+        en: "Cybertron Company Limited | Bangkok"
+      },
       period: "Aug 2024 – Feb 2025",
-      type: "Specialist",
+      type: {
+        th: "ผู้เชี่ยวชาญ",
+        en: "Specialist"
+      },
       highlights: [
-        "Incident Monitoring: Monitored and triaged cybersecurity incidents across multiple client environments to ensure timely detection and response.",
-        "Threat Analysis: Analyzed alerts, indicators, and attack behaviors to identify risk severity and determine appropriate containment actions.",
-        "Prioritization & Escalation: Prioritized intrusions based on business impact and escalated critical threats to response teams under SLA timelines.",
-        "Operational Reporting: Produced daily incident summaries and management-ready reports highlighting active threats and response progress.",
-        "Security Metrics: Compiled trend statistics on suspicious activities to support decision-making and improve defensive posture.",
-        "Client Advisory: Provided practical recommendations and technical guidance to reduce recurring security risks.",
-        "Process Compliance: Ensured SOC operations followed incident response procedures, ticket workflows, and contractual SLA requirements.",
-        "Threat Research: Researched emerging attack vectors and adversary techniques to strengthen detection and response readiness."
+        {
+          th: "Incident Monitoring: เฝ้าระวังและคัดแยกเหตุการณ์ด้านความปลอดภัยไซเบอร์จากหลายสภาพแวดล้อมลูกค้า เพื่อให้ตรวจจับและตอบสนองได้ทันเวลา",
+          en: "Incident Monitoring: Monitored and triaged cybersecurity incidents across multiple client environments to ensure timely detection and response."
+        },
+        {
+          th: "Threat Analysis: วิเคราะห์ alerts, indicators และพฤติกรรมการโจมตี เพื่อประเมินระดับความเสี่ยงและกำหนดแนวทางยับยั้งที่เหมาะสม",
+          en: "Threat Analysis: Analyzed alerts, indicators, and attack behaviors to identify risk severity and determine appropriate containment actions."
+        },
+        {
+          th: "Prioritization & Escalation: จัดลำดับความสำคัญของการบุกรุกตามผลกระทบทางธุรกิจ และ escalated ภัยคุกคามสำคัญตาม SLA",
+          en: "Prioritization & Escalation: Prioritized intrusions based on business impact and escalated critical threats to response teams under SLA timelines."
+        },
+        {
+          th: "Operational Reporting: จัดทำรายงานเหตุการณ์รายวันและรายงานสำหรับผู้บริหาร โดยสรุปภัยคุกคามที่กำลังเกิดขึ้นและความคืบหน้าการตอบสนอง",
+          en: "Operational Reporting: Produced daily incident summaries and management-ready reports highlighting active threats and response progress."
+        },
+        {
+          th: "Security Metrics: รวบรวมสถิติแนวโน้มกิจกรรมผิดปกติเพื่อสนับสนุนการตัดสินใจและยกระดับมาตรการป้องกัน",
+          en: "Security Metrics: Compiled trend statistics on suspicious activities to support decision-making and improve defensive posture."
+        },
+        {
+          th: "Client Advisory: ให้คำแนะนำเชิงปฏิบัติและคำปรึกษาทางเทคนิคเพื่อลดความเสี่ยงด้านความปลอดภัยที่เกิดซ้ำ",
+          en: "Client Advisory: Provided practical recommendations and technical guidance to reduce recurring security risks."
+        },
+        {
+          th: "Process Compliance: ดูแลการปฏิบัติงาน SOC ให้เป็นไปตามขั้นตอน incident response, ticket workflow และ SLA ตามสัญญา",
+          en: "Process Compliance: Ensured SOC operations followed incident response procedures, ticket workflows, and contractual SLA requirements."
+        },
+        {
+          th: "Threat Research: ศึกษารูปแบบการโจมตีและเทคนิคของผู้โจมตีที่เกิดใหม่ เพื่อเพิ่มความพร้อมด้านการตรวจจับและตอบสนอง",
+          en: "Threat Research: Researched emerging attack vectors and adversary techniques to strengthen detection and response readiness."
+        }
       ]
     },
     {
-      role: "Data Loss Prevention (DLP) Analyst",
-      company: "Metro Systems Corporation (at PTT Digital) | Bangkok",
+      role: {
+        th: "Data Loss Prevention (DLP) Analyst",
+        en: "Data Loss Prevention (DLP) Analyst"
+      },
+      company: {
+        th: "Metro Systems Corporation (ประจำ PTT Digital) | กรุงเทพฯ",
+        en: "Metro Systems Corporation (at PTT Digital) | Bangkok"
+      },
       period: "Aug 2023 – Jul 2024",
-      type: "Analyst",
+      type: {
+        th: "นักวิเคราะห์",
+        en: "Analyst"
+      },
       highlights: [
-        "Continuous Oversight: Monitored system incidents 24/7 leveraging Forcepoint DLP and Boldon James.",
-        "Breach Notification: Quickly notified end users and relevant teams regarding data breaches, following established procedures.",
-        "DLP Reporting: Created DLP incident reports and monthly summaries derived from DLP incident monitoring.",
-        "Agent Distribution: Handled the distribution and maintenance of DLP agents to end users.",
-        "Coordination: Coordinated the seamless deployment of Boldon James agents to endpoint devices."
+        {
+          th: "Continuous Oversight: เฝ้าระวังเหตุการณ์ระบบตลอด 24/7 โดยใช้ Forcepoint DLP และ Boldon James",
+          en: "Continuous Oversight: Monitored system incidents 24/7 leveraging Forcepoint DLP and Boldon James."
+        },
+        {
+          th: "Breach Notification: แจ้งเตือนผู้ใช้งานและทีมที่เกี่ยวข้องอย่างรวดเร็วเมื่อพบเหตุ Data Breach ตามขั้นตอนที่กำหนด",
+          en: "Breach Notification: Quickly notified end users and relevant teams regarding data breaches, following established procedures."
+        },
+        {
+          th: "DLP Reporting: จัดทำรายงานเหตุการณ์ DLP และสรุปรายเดือนจากข้อมูลการเฝ้าระวัง",
+          en: "DLP Reporting: Created DLP incident reports and monthly summaries derived from DLP incident monitoring."
+        },
+        {
+          th: "Agent Distribution: ดูแลการกระจายและบำรุงรักษา DLP Agent ให้กับผู้ใช้งานปลายทาง",
+          en: "Agent Distribution: Handled the distribution and maintenance of DLP agents to end users."
+        },
+        {
+          th: "Coordination: ประสานงานการติดตั้ง Boldon James Agent ไปยังอุปกรณ์ปลายทางให้เป็นไปอย่างต่อเนื่อง",
+          en: "Coordination: Coordinated the seamless deployment of Boldon James agents to endpoint devices."
+        }
       ]
     },
     {
-      role: "IT Support (Outsource)",
-      company: "Acacia I.T. (at Krungthai Bank HQ) | Bangkok",
+      role: {
+        th: "IT Support (Outsource)",
+        en: "IT Support (Outsource)"
+      },
+      company: {
+        th: "Acacia I.T. (ประจำสำนักงานใหญ่ธนาคารกรุงไทย) | กรุงเทพฯ",
+        en: "Acacia I.T. (at Krungthai Bank HQ) | Bangkok"
+      },
       period: "Jan 2022 – Dec 2022",
-      type: "Support",
+      type: {
+        th: "สนับสนุนระบบ",
+        en: "Support"
+      },
       highlights: [
-        "Provided critical IT support for banking systems and terminal hardware at the headquarters.",
-        "Resolved complex network connectivity issues (VPN) for bank personnel in a secure environment."
+        {
+          th: "ให้การสนับสนุนงาน IT ที่สำคัญสำหรับระบบธนาคารและอุปกรณ์ปลายทางภายในสำนักงานใหญ่",
+          en: "Provided critical IT support for banking systems and terminal hardware at the headquarters."
+        },
+        {
+          th: "แก้ไขปัญหาการเชื่อมต่อเครือข่ายที่ซับซ้อน (VPN) ให้กับพนักงานธนาคารภายใต้สภาพแวดล้อมที่มีความปลอดภัยสูง",
+          en: "Resolved complex network connectivity issues (VPN) for bank personnel in a secure environment."
+        }
       ]
     }
-  ],
+  ] as ExperienceItem[],
   projects: [
     {
-      name: "SOC AI SaaS Platform",
-      subtitle: "Graph API & AD Integration",
-      desc: "Architected a unified security platform integrated with Microsoft Graph API. Developed logic for Active Directory authentication and automated Outlook Calendar Mapping to sync security shifts and critical incident response times directly to analyst email accounts.",
+      name: {
+        th: "แพลตฟอร์ม SOC AI แบบ SaaS",
+        en: "SOC AI SaaS Platform"
+      },
+      subtitle: {
+        th: "เชื่อมต่อ Graph API และ AD",
+        en: "Graph API & AD Integration"
+      },
+      desc: {
+        th: "ออกแบบแพลตฟอร์มความปลอดภัยแบบรวมศูนย์ที่เชื่อมต่อกับ Microsoft Graph API พร้อมพัฒนา logic สำหรับการยืนยันตัวตนผ่าน Active Directory และ Outlook Calendar Mapping อัตโนมัติ เพื่อซิงก์ตารางเวรและเวลาตอบสนองเหตุการณ์สำคัญเข้าสู่บัญชีอีเมลของนักวิเคราะห์",
+        en: "Architected a unified security platform integrated with Microsoft Graph API. Developed logic for Active Directory authentication and automated Outlook Calendar Mapping to sync security shifts and critical incident response times directly to analyst email accounts."
+      },
       stack: ["Next.js", "Express.js", "Microsoft Graph API", "Active Directory", "CrowdStrike", "Cortex XDR"],
       icon: Shield
     },
     {
-      name: "Project Management & Billing System",
-      subtitle: "Multi-tenant PMS with Microsoft Exchange",
-      desc: "Engineered a multi-tenant PMS integrated with Microsoft Exchange. All milestones and resource reports are AD-authenticated and synchronized with Corporate Email and Outlook Calendars for unified visibility.",
+      name: {
+        th: "ระบบบริหารโครงการและการเรียกเก็บเงิน",
+        en: "Project Management & Billing System"
+      },
+      subtitle: {
+        th: "PMS แบบหลายผู้เช่าร่วมกับ Microsoft Exchange",
+        en: "Multi-tenant PMS with Microsoft Exchange"
+      },
+      desc: {
+        th: "พัฒนาระบบ PMS แบบ Multi-tenant ที่เชื่อมต่อกับ Microsoft Exchange โดยกำหนดให้ milestone และรายงานทรัพยากรยืนยันตัวตนผ่าน AD และซิงก์กับ Corporate Email และ Outlook Calendar เพื่อให้ทุกฝ่ายมองเห็นข้อมูลชุดเดียวกัน",
+        en: "Engineered a multi-tenant PMS integrated with Microsoft Exchange. All milestones and resource reports are AD-authenticated and synchronized with Corporate Email and Outlook Calendars for unified visibility."
+      },
       stack: ["Next.js", "NestJS", "Microsoft Exchange", "Active Directory", "PostgreSQL"],
       icon: Layers
     },
     {
-      name: "Custom Phishing Simulation Engine",
-      subtitle: "Proprietary Security Awareness Tool",
-      desc: "Prior to adopting KnowBe4, developed a proprietary phishing simulation tool. Created automated mail-flow templates integrated with internal email servers to track interaction metrics and educational feedback.",
+      name: {
+        th: "ระบบจำลองฟิชชิงแบบพัฒนาเอง",
+        en: "Custom Phishing Simulation Engine"
+      },
+      subtitle: {
+        th: "เครื่องมือ Security Awareness ภายในองค์กร",
+        en: "Proprietary Security Awareness Tool"
+      },
+      desc: {
+        th: "ก่อนเริ่มใช้งาน KnowBe4 ได้พัฒนาเครื่องมือจำลองฟิชชิงขึ้นเอง พร้อมสร้างแม่แบบ mail-flow อัตโนมัติที่เชื่อมกับระบบอีเมลภายใน เพื่อเก็บสถิติการโต้ตอบและส่ง feedback เชิงการเรียนรู้ให้ผู้ใช้งาน",
+        en: "Prior to adopting KnowBe4, developed a proprietary phishing simulation tool. Created automated mail-flow templates integrated with internal email servers to track interaction metrics and educational feedback."
+      },
       stack: ["Python", "SMTP", "Mail Templates", "Analytics Dashboard"],
       icon: Lock
     }
-  ],
+  ] as Project[],
   education: [
     {
-      degree: "Bachelor's Degree in Computer Engineering Technology",
-      uni: "Rajamangala University of Technology Krungthep",
+      degree: {
+        th: "ปริญญาตรี เทคโนโลยีวิศวกรรมคอมพิวเตอร์",
+        en: "Bachelor's Degree in Computer Engineering Technology"
+      },
+      uni: {
+        th: "มหาวิทยาลัยเทคโนโลยีราชมงคลกรุงเทพ",
+        en: "Rajamangala University of Technology Krungthep"
+      },
       year: "2018 – 2022"
     }
   ],
@@ -368,14 +500,22 @@ const SkillCard = ({ title, skills, icon: Icon, delay }: SkillCardProps) => (
 );
 
 interface Project {
-  name: string;
-  subtitle: string;
-  desc: string;
+  name: LocalizedText;
+  subtitle: LocalizedText;
+  desc: LocalizedText;
   stack: string[];
   icon: LucideIcon;
 }
 
-const ProjectCard = ({ project, actionLabel }: { project: Project; actionLabel: string }) => (
+interface ExperienceItem {
+  role: LocalizedText;
+  company: LocalizedText;
+  period: string;
+  type: LocalizedText;
+  highlights: LocalizedText[];
+}
+
+const ProjectCard = ({ project, actionLabel, lang }: { project: Project; actionLabel: string; lang: Lang }) => (
   <div className="reveal-on-scroll opacity-0 translate-y-8 group relative bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden hover:border-violet-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-900/10 flex flex-col h-full">
     {/* Card Header Gradient */}
     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-violet-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -394,12 +534,12 @@ const ProjectCard = ({ project, actionLabel }: { project: Project; actionLabel: 
       </div>
       
       <h3 className="text-2xl font-bold text-white mb-2 font-heading group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-violet-400 group-hover:to-cyan-400 transition-all">
-        {project.name}
+        {t(project.name, lang)}
       </h3>
-      <p className="text-sm font-mono text-violet-400 mb-4">{project.subtitle}</p>
+      <p className="text-sm font-mono text-violet-400 mb-4">{t(project.subtitle, lang)}</p>
       
       <p className="text-slate-300 text-sm leading-relaxed mb-6 flex-grow border-l-2 border-slate-800 pl-4">
-        {project.desc}
+        {t(project.desc, lang)}
       </p>
 
       <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800/50 mt-auto">
@@ -456,7 +596,8 @@ const App = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [lang, setLang] = useState<Lang>('th');
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [lang, setLang] = useState<Lang>('en');
   const copy = UI_COPY[lang];
   const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
 
@@ -470,6 +611,7 @@ const App = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrolled(window.scrollY > 20);
+          setShowScrollTop(window.scrollY > 500);
           
           // Smart active section detection
           for (const section of sections) {
@@ -555,7 +697,7 @@ const App = () => {
             </div>
 
             {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-1 bg-slate-950/50 p-1 rounded-full border border-slate-800/50 backdrop-blur-sm">
+            <div className="hidden lg:flex items-center space-x-1 bg-slate-950/50 p-1 rounded-full border border-slate-800/50 backdrop-blur-sm">
               {copy.nav.map((item, idx) => (
                 <button
                   key={item}
@@ -573,7 +715,7 @@ const App = () => {
 
             {/* CTA */}
             <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs font-mono text-slate-300">
+              <div className="hidden lg:flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs font-mono text-slate-300">
                 <span className="text-slate-500">{copy.languageLabel}</span>
                 <button
                   onClick={() => setLang('th')}
@@ -590,12 +732,12 @@ const App = () => {
               </div>
               <button 
                 onClick={() => scrollTo('contact')}
-                className="hidden md:flex items-center gap-2 px-5 py-2 bg-white text-slate-950 text-sm font-bold rounded-full hover:bg-cyan-50 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+                className="hidden lg:flex items-center gap-2 px-5 py-2 bg-white text-slate-950 text-sm font-bold rounded-full hover:bg-cyan-50 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
               >
                 {copy.hireMe}
               </button>
               <button 
-                className="md:hidden text-slate-300 hover:text-white p-2" 
+                className="lg:hidden text-slate-300 hover:text-white p-2" 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle Menu"
               >
@@ -607,7 +749,7 @@ const App = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="absolute top-full left-4 right-4 mt-2 p-2 bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl md:hidden animate-reveal z-50">
+          <div className="absolute top-full left-4 right-4 mt-2 p-2 bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl lg:hidden animate-reveal z-50">
             <div className="flex flex-col">
               <div className="mb-2 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-2 text-xs font-mono text-slate-400">
                 <span>{copy.languageLabel}</span>
@@ -809,17 +951,17 @@ const App = () => {
                   <div className="w-full md:w-1/2">
                     <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-violet-500/40 transition-all hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group-hover:bg-slate-900/50">
                       <div className="absolute top-0 right-0 px-3 py-1 bg-slate-900 text-[10px] font-bold uppercase text-slate-500 rounded-bl-xl border-l border-b border-slate-800">
-                        {job.type}
+                        {t(job.type, lang)}
                       </div>
                       <div className="md:hidden text-xs text-cyan-500 font-mono mb-2">{job.period}</div>
-                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors font-heading">{job.role}</h3>
+                      <h3 className="text-xl font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors font-heading">{t(job.role, lang)}</h3>
                       <div className="text-slate-400 font-medium mb-4 flex items-center gap-2 text-sm">
-                        <MapPin size={14} /> {job.company}
+                        <MapPin size={14} /> {t(job.company, lang)}
                       </div>
                       <ul className="space-y-2">
                         {job.highlights.map((h, i) => (
                           <li key={i} className="text-sm text-slate-300 pl-4 relative before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:bg-slate-600 before:rounded-full group-hover:before:bg-cyan-500 transition-colors">
-                            {h}
+                            {t(h, lang)}
                           </li>
                         ))}
                       </ul>
@@ -844,7 +986,7 @@ const App = () => {
 
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {DATA.projects.map((proj, idx) => (
-              <ProjectCard key={idx} project={proj} actionLabel={copy.viewArchitecture} />
+              <ProjectCard key={idx} project={proj} actionLabel={copy.viewArchitecture} lang={lang} />
             ))}
           </div>
         </div>
@@ -864,8 +1006,8 @@ const App = () => {
                   <Award size={20} />
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-lg">{edu.degree}</h4>
-                  <p className="text-slate-400">{edu.uni}</p>
+                  <h4 className="text-white font-bold text-lg">{t(edu.degree, lang)}</h4>
+                  <p className="text-slate-400">{t(edu.uni, lang)}</p>
                   <p className="text-sm text-slate-500 mt-1 font-mono">{edu.year}</p>
                 </div>
               </div>
@@ -953,6 +1095,14 @@ const App = () => {
           </footer>
         </div>
       </section>
+
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Scroll to top"
+        className={`fixed bottom-6 right-6 z-50 rounded-full border border-cyan-500/40 bg-slate-900/90 p-3 text-cyan-300 shadow-lg shadow-cyan-900/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-500 hover:text-slate-950 ${showScrollTop ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      >
+        <ArrowUp size={20} />
+      </button>
     </div>
   );
 };
