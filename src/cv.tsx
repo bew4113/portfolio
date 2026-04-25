@@ -6,113 +6,255 @@ import {
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
-// --- DATA SECTION (UPDATED FROM PDF & CV) ---
+type Lang = 'th' | 'en';
+
+interface LocalizedText {
+  th: string;
+  en: string;
+}
+
+const UI_COPY: Record<Lang, {
+  nav: string[];
+  mobileNav: string[];
+  roleMini: string;
+  hireMe: string;
+  availability: string;
+  heroTitleTop: string;
+  heroTitleMid: string;
+  heroTitleBottom: string;
+  heroDesc: string;
+  viewArchitecture: string;
+  contactMe: string;
+  chips: string[];
+  about: string;
+  technicalSkill: string;
+  technicalSkillDesc: string;
+  skillTitles: string[];
+  journey: string;
+  projects: string;
+  projectsDesc: string;
+  education: string;
+  certifications: string;
+  lets: string;
+  collaborate: string;
+  contactDesc: string;
+  emailAddress: string;
+  phoneNumber: string;
+  rights: string;
+  systemOnline: string;
+  languageLabel: string;
+}> = {
+  th: {
+    nav: ['หน้าหลัก', 'เกี่ยวกับ', 'ทักษะ', 'ประสบการณ์', 'โปรเจกต์'],
+    mobileNav: ['หน้าหลัก', 'เกี่ยวกับ', 'ทักษะ', 'ประสบการณ์', 'โปรเจกต์', 'ติดต่อ'],
+    roleMini: 'System Engineer',
+    hireMe: 'ร่วมงานกับผม',
+    availability: 'พร้อมรับโอกาสใหม่',
+    heroTitleTop: 'เชื่อมงานความปลอดภัย',
+    heroTitleMid: 'Operations',
+    heroTitleBottom: 'กับวิศวกรรมสมัยใหม่',
+    heroDesc: 'System Engineer และ Security Architect ที่ออกแบบ data pipeline ประสิทธิภาพสูง, infrastructure ที่ปลอดภัย และแพลตฟอร์ม SIEM รุ่นใหม่สำหรับงานจริง',
+    viewArchitecture: 'ดูสถาปัตยกรรม',
+    contactMe: 'ติดต่อ',
+    chips: ['Cyber Security', 'Big Data Ops', 'Full Stack'],
+    about: 'เกี่ยวกับผม',
+    technicalSkill: 'ทักษะเทคนิค',
+    technicalSkillDesc: 'ความเชี่ยวชาญของผมครอบคลุมตั้งแต่ infrastructure ระดับลึกไปจนถึง application security ระดับระบบ',
+    skillTitles: ['Security Stack', 'Dev & Integration', 'Infrastructure & DB', 'System & Operations'],
+    journey: 'เส้นทางการทำงาน',
+    projects: 'โปรเจกต์สำคัญ',
+    projectsDesc: 'นวัตกรรมที่ใช้งานได้จริง',
+    education: 'การศึกษา',
+    certifications: 'ใบรับรอง',
+    lets: 'มา',
+    collaborate: 'ร่วมงานกัน',
+    contactDesc: 'พร้อมช่วยยกระดับความปลอดภัยของระบบ หรือร่วมพัฒนาแพลตฟอร์มรุ่นใหม่สำหรับองค์กร',
+    emailAddress: 'อีเมล',
+    phoneNumber: 'เบอร์โทร',
+    rights: 'สงวนลิขสิทธิ์',
+    systemOnline: 'ระบบ: ออนไลน์',
+    languageLabel: 'ภาษา'
+  },
+  en: {
+    nav: ['Home', 'About', 'Skills', 'Experience', 'Projects'],
+    mobileNav: ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact'],
+    roleMini: 'System Engineer',
+    hireMe: 'Hire Me',
+    availability: 'AVAILABLE FOR NEW OPPORTUNITIES',
+    heroTitleTop: 'Bridging Security',
+    heroTitleMid: 'Operations',
+    heroTitleBottom: 'With Modern Engineering',
+    heroDesc: 'System Engineer & Security Architect. I build high-performance data pipelines, secure infrastructures, and next-gen SIEM platforms.',
+    viewArchitecture: 'View Architecture',
+    contactMe: 'Contact Me',
+    chips: ['Cyber Security', 'Big Data Ops', 'Full Stack'],
+    about: 'About Me',
+    technicalSkill: 'Technical Skill',
+    technicalSkillDesc: 'My expertise spans from low-level infrastructure to high-level application security.',
+    skillTitles: ['Security Stack', 'Dev & Integration', 'Infrastructure & DB', 'System & Operations'],
+    journey: 'Professional Journey',
+    projects: 'Key Projects',
+    projectsDesc: 'Innovation meets Implementation',
+    education: 'Education',
+    certifications: 'Certifications',
+    lets: "Let's",
+    collaborate: 'Collaborate',
+    contactDesc: 'Ready to secure your infrastructure or build the next-gen platform? I am available for new opportunities and consulting.',
+    emailAddress: 'Email Address',
+    phoneNumber: 'Phone Number',
+    rights: 'All Rights Reserved.',
+    systemOnline: 'System Status: Online',
+    languageLabel: 'Language'
+  }
+};
+
+const t = (value: LocalizedText, lang: Lang) => value[lang];
+
+// --- DATA SECTION (UPDATED FROM CV) ---
 const DATA = {
   personal: {
     nameTH: "ภานุพงศ์ นิจบุญ",
     nameEN: "Panupong Nijjaboon",
-    role: "System Engineer | Security Architect | Full Stack Developer",
+    role: {
+      th: "System Engineer และ Cybersecurity",
+      en: "System Engineer & Cybersecurity"
+    },
     email: "panupong.nijjaboon@gmail.com",
     phone: "098-276-4341",
-    location: "Bangkok / Samut Sakhon",
+    location: {
+      th: "สมุทรสาคร, กรุงเทพฯ",
+      en: "Samut Sakhon, Bangkok"
+    },
     linkedin: "https://www.linkedin.com/in/panupong-nijjaboon-964a8927b/",
     github: "https://github.com/bew4113"
   },
-  summary: `วิศวกรระบบ (System Engineer) และ Security Architect ที่ไม่ได้มองแค่ Infrastructure แต่เข้าใจลึกซึ้งถึง Application Layer และ Data Pipeline. เชี่ยวชาญการออกแบบระบบ Centralized Log Management ประสิทธิภาพสูง (High-Performance Computing) โดยใช้ ClickHouse และ Vector รองรับข้อมูลมหาศาล
+  summary: {
+    th: "วิศวกรระบบและความปลอดภัยไซเบอร์ที่เชี่ยวชาญด้านการออกแบบสถาปัตยกรรม SOC และงานอัตโนมัติของโครงสร้างพื้นฐาน มีประสบการณ์บูรณาการโซลูชันความปลอดภัยระดับองค์กรกับ Active Directory และ Microsoft Graph API รวมถึงการจัดการ log ปริมาณสูงด้วย CrowdStrike LogScale และการพัฒนา playbook สำหรับการตอบสนองเหตุการณ์อัตโนมัติ",
+    en: "System and Cybersecurity Engineer specialized in SOC platform architecture and infrastructure automation. Expertise in integrating enterprise security solutions with Active Directory and Microsoft Graph API. Experienced in managing high-volume log ingestion using CrowdStrike LogScale and developing automated response playbooks. Specialized in designing secure, automated operational tools with unified identity management."
+  },
 
-  ปัจจุบันมุ่งเน้นการสร้าง "Unified Cybersecurity Platform" ที่ผสานการทำงานของ Security Tools (CrowdStrike, Cortex XDR, Netskope) เข้ากับ Modern Web Stack (Next.js, Three.js) เพื่อสร้าง Dashboard ที่ไม่ใช่แค่สวยงาม แต่ใช้งานได้จริงในศูนย์ SOC ระดับ Enterprise`,
-  
   skills: {
     core: [
-      "System Architecture", "High-Performance Computing", "Log Engineering", "Containerization (Docker)"
+      "CrowdStrike Falcon", "Cortex XDR", "Wazuh (SIEM)", "Vectra AI",
+      "Netskope", "Cloudflare WAF", "KnowBe4", "Silverfort",
+      "Keyfactor", "Forcepoint DLP", "Horizon3.ai", "wafw00f"
     ],
     security: [
-      "SIEM Design", "Threat Intelligence", "EDR Integration (CrowdStrike/Cortex)", "WAF/DDoS Protection (Cloudflare)", "Security Compliance"
+      "Microsoft Graph API", "Active Directory", "Outlook Calendar Mapping",
+      "n8n Automation", "TypeScript / JS", "Next.js / NestJS", "Python (Automation)"
     ],
     dev: [
-      "Next.js 14 (SSR)", "TypeScript", "Zod", "Shadcn UI", "Three.js/Globe.gl"
+      "VMware ESXi", "Docker", "CrowdStrike LogScale",
+      "MinIO", "PostgreSQL", "MongoDB", "ClickHouse", "Vector.dev"
     ],
     dataOps: [
-      "ClickHouse (Big Data)", "Vector (Log Pipeline)", "MinIO (Object Storage)", "PostgreSQL"
+      "OAuth 2.0 / OIDC", "SMTP / Microsoft Exchange", "VPN Management",
+      "SSL/TLS Management", "Nginx Proxy Manager",
+      "Technical Consulting", "Solution Architecture", "SLA Compliance", "Phishing Awareness"
     ]
   },
 
-  // Tech Stack สำหรับตัววิ่ง (Marquee)
+  // Tech Stack for Marquee
   techStackMarquee: [
-    "CrowdStrike", "Cortex XDR", "Netskope", "Silverfort", 
-    "ClickHouse", "Vector.dev", "MinIO", "Docker", "Kubernetes", 
-    "Next.js", "React", "TypeScript", "Tailwind CSS", "Three.js", 
-    "Cloudflare", "Nginx", "PostgreSQL", "Uptime Kuma", "Zod", "Redis"
+    "CrowdStrike", "Cortex XDR", "Netskope", "Silverfort",
+    "ClickHouse", "Vector.dev", "MinIO", "Docker",
+    "Next.js", "React", "TypeScript", "Tailwind CSS",
+    "Cloudflare WAF", "Nginx", "PostgreSQL", "Microsoft Graph API",
+    "Active Directory", "Wazuh", "Keyfactor", "Forcepoint DLP"
   ],
 
   experience: [
     {
       role: "System Engineer",
-      company: "TEN FORWARD CO., LTD.",
+      company: "TEN FORWARD CO., LTD. | Bangkok",
       period: "Mar 2025 – Present",
       type: "Current Role",
       highlights: [
-        "Architected TENCYBER Platform: ออกแบบระบบ Next-Gen SIEM รองรับ Log หลักล้าน/วินาที ด้วย ClickHouse & Vector",
-        "Pipeline Optimization: ใช้ Vector Transform Log และบีบอัด LZ4 ลด Storage Cost ได้ 80%",
-        "Infrastructure: ดูแล Docker Swarm/Kubernetes และ Storage Strategy (Hot/Cold Data)",
-        "Security Ops: บริหารจัดการ CrowdStrike, Netskope, Silverfort และทำ Automation Policy"
+        "SOC Platform Architecture: Engineered \"SOC AI\" SaaS platform using Next.js/Express.js, integrating real-time alert ingestion from CrowdStrike and Cortex XDR via APIs.",
+        "Microsoft Graph API Integration: Implemented Graph API across all core platforms (SOC AI, PMS) to enable Outlook Calendar Mapping and Active Directory (AD) authentication for automated scheduling and email notifications.",
+        "Automated Playbooks: Developed automated incident response logic within SOC AI, including Auto-isolate host functionality via API for rapid threat containment during Ransomware incidents.",
+        "Pre-sales Discovery: Utilized wafw00f to perform technical analysis on customer infrastructure to identify WAF solutions and security gaps, supporting sales strategies.",
+        "Log Architecture: Configured and managed CrowdStrike LogScale as a primary LogCollector to handle high-throughput enterprise security data.",
+        "Environment Management: Managed virtualization on VMware ESXi and containerized services on Docker, utilizing MinIO for object storage and PostgreSQL for data management."
       ]
     },
     {
       role: "Cybersecurity Analyst",
-      company: "Cybertron Co., Ltd.",
+      company: "Cybertron Company Limited | Bangkok",
       period: "Aug 2024 – Feb 2025",
       type: "Specialist",
       highlights: [
-        "Threat Hunting: วิเคราะห์ภัยคุกคาม 24/7 และทำ Incident Response Plan",
-        "Vulnerability Research: ศึกษา Zero-day และปรับจูน Detection Rules",
-        "Report: จัดทำสรุปความเสี่ยงและแนวทางแก้ไข (Remediation) ให้ลูกค้า Enterprise"
+        "Incident Monitoring: Monitored and triaged cybersecurity incidents across multiple client environments to ensure timely detection and response.",
+        "Threat Analysis: Analyzed alerts, indicators, and attack behaviors to identify risk severity and determine appropriate containment actions.",
+        "Prioritization & Escalation: Prioritized intrusions based on business impact and escalated critical threats to response teams under SLA timelines.",
+        "Operational Reporting: Produced daily incident summaries and management-ready reports highlighting active threats and response progress.",
+        "Security Metrics: Compiled trend statistics on suspicious activities to support decision-making and improve defensive posture.",
+        "Client Advisory: Provided practical recommendations and technical guidance to reduce recurring security risks.",
+        "Process Compliance: Ensured SOC operations followed incident response procedures, ticket workflows, and contractual SLA requirements.",
+        "Threat Research: Researched emerging attack vectors and adversary techniques to strengthen detection and response readiness."
       ]
     },
     {
-      role: "DLP Officer",
-      company: "Metro Systems Corp.",
+      role: "Data Loss Prevention (DLP) Analyst",
+      company: "Metro Systems Corporation (at PTT Digital) | Bangkok",
       period: "Aug 2023 – Jul 2024",
-      type: "Officer",
+      type: "Analyst",
       highlights: [
-        "Data Protection: ดูแล Forcepoint DLP และ Boldon James ให้ PTT Digital",
-        "Policy Tuning: ปรับแต่ง Policy เพื่อลด False Positive และรักษา SLA"
+        "Continuous Oversight: Monitored system incidents 24/7 leveraging Forcepoint DLP and Boldon James.",
+        "Breach Notification: Quickly notified end users and relevant teams regarding data breaches, following established procedures.",
+        "DLP Reporting: Created DLP incident reports and monthly summaries derived from DLP incident monitoring.",
+        "Agent Distribution: Handled the distribution and maintenance of DLP agents to end users.",
+        "Coordination: Coordinated the seamless deployment of Boldon James agents to endpoint devices."
+      ]
+    },
+    {
+      role: "IT Support (Outsource)",
+      company: "Acacia I.T. (at Krungthai Bank HQ) | Bangkok",
+      period: "Jan 2022 – Dec 2022",
+      type: "Support",
+      highlights: [
+        "Provided critical IT support for banking systems and terminal hardware at the headquarters.",
+        "Resolved complex network connectivity issues (VPN) for bank personnel in a secure environment."
       ]
     }
   ],
   projects: [
     {
-      name: "TENCYBER Platform",
-      subtitle: "Unified Cybersecurity Platform & SIEM",
-      desc: "ระบบ Centralized Log Management และ SIEM ประสิทธิภาพสูง ออกแบบตามหลักการ Single Pane of Glass รองรับ Log มหาศาลด้วย ClickHouse (Hot Tier) และ MinIO (Cold Tier) พร้อมหน้า Dashboard 3D Visualization",
-      stack: ["Next.js 14", "ClickHouse", "Vector", "MinIO", "Three.js", "Zod"],
+      name: "SOC AI SaaS Platform",
+      subtitle: "Graph API & AD Integration",
+      desc: "Architected a unified security platform integrated with Microsoft Graph API. Developed logic for Active Directory authentication and automated Outlook Calendar Mapping to sync security shifts and critical incident response times directly to analyst email accounts.",
+      stack: ["Next.js", "Express.js", "Microsoft Graph API", "Active Directory", "CrowdStrike", "Cortex XDR"],
       icon: Shield
     },
     {
-      name: "Smart Log Pipeline",
-      subtitle: "High-Throughput Ingestion Architecture",
-      desc: "ออกแบบ Pipeline การไหลของข้อมูลด้วย Vector.dev เพื่อทำ ETL (Extract, Transform, Load) ข้อมูล Log จาก EDR/Firewall ก่อนบันทึกลง Database ช่วยลดภาระ Server และประหยัดพื้นที่จัดเก็บด้วย LZ4 Compression",
-      stack: ["Vector", "Lua Script", "Docker", "Linux Optimization"],
-      icon: Database
+      name: "Project Management & Billing System",
+      subtitle: "Multi-tenant PMS with Microsoft Exchange",
+      desc: "Engineered a multi-tenant PMS integrated with Microsoft Exchange. All milestones and resource reports are AD-authenticated and synchronized with Corporate Email and Outlook Calendars for unified visibility.",
+      stack: ["Next.js", "NestJS", "Microsoft Exchange", "Active Directory", "PostgreSQL"],
+      icon: Layers
     },
     {
-      name: "Secure Gateway & Auth",
-      subtitle: "5-Layer Security Architecture",
-      desc: "วางระบบความปลอดภัย 5 ชั้น (Network, App, Auth, System, Data) ตั้งแต่ Cloudflare WAF, Nginx Rate Limiting ไปจนถึง 2FA/TOTP และ RBAC เพื่อป้องกันการโจมตีทางไซเบอร์ครบวงจร",
-      stack: ["Nginx", "Cloudflare", "JWT", "Redis", "Helmet.js"],
+      name: "Custom Phishing Simulation Engine",
+      subtitle: "Proprietary Security Awareness Tool",
+      desc: "Prior to adopting KnowBe4, developed a proprietary phishing simulation tool. Created automated mail-flow templates integrated with internal email servers to track interaction metrics and educational feedback.",
+      stack: ["Python", "SMTP", "Mail Templates", "Analytics Dashboard"],
       icon: Lock
     }
   ],
   education: [
     {
-      degree: "ปริญญาตรี, เทคโนโลยีวิศวกรรมคอมพิวเตอร์",
-      uni: "มหาวิทยาลัยเทคโนโลยีราชมงคลกรุงเทพ",
-      year: "2022"
+      degree: "Bachelor's Degree in Computer Engineering Technology",
+      uni: "Rajamangala University of Technology Krungthep",
+      year: "2018 – 2022"
     }
   ],
   certs: [
-    "eJPT (Junior Penetration Tester)",
-    "CompTIA Security+"
+    "CompTIA Security+",
+    "eJPT - Junior Pen Tester (INE)",
+    "CrowdStrike Technical Sales Accreditation",
+    "CWL - Red Team Analyst (CRTA)",
+    "CWL - Multi-Cloud Red Teaming Analyst",
+    "CWL - AD Red Team Specialist (AD-RTS)"
   ]
 };
 
@@ -233,7 +375,7 @@ interface Project {
   icon: LucideIcon;
 }
 
-const ProjectCard = ({ project }: { project: Project }) => (
+const ProjectCard = ({ project, actionLabel }: { project: Project; actionLabel: string }) => (
   <div className="reveal-on-scroll opacity-0 translate-y-8 group relative bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden hover:border-violet-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-900/10 flex flex-col h-full">
     {/* Card Header Gradient */}
     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-violet-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -245,7 +387,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
         </div>
         <div className="flex gap-2">
           {/* Mock Actions */}
-          <div className="p-2 hover:bg-slate-800 rounded-full cursor-pointer transition-colors" title="View Architecture">
+          <div className="p-2 hover:bg-slate-800 rounded-full cursor-pointer transition-colors" title={actionLabel}>
             <Layers size={18} className="text-slate-500 hover:text-white" />
           </div>
         </div>
@@ -272,7 +414,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
 );
 
 // New Component: Profile Image Holder
-const ProfileImage = () => (
+const ProfileImage = ({ fallbackHint }: { fallbackHint: string }) => (
   <div className="relative group w-48 h-48 md:w-64 md:h-64 mx-auto md:mx-0">
     {/* Animated Border */}
     <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-violet-500 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
@@ -296,7 +438,7 @@ const ProfileImage = () => (
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                  </svg>
                  <span class="text-xs text-slate-500 font-mono">Panupong.jpg</span>
-                 <span class="text-[10px] text-slate-600 mt-1">วางรูปภาพที่ public/</span>
+                 <span class="text-[10px] text-slate-600 mt-1">${fallbackHint}</span>
                </div>
              `;
            }
@@ -314,6 +456,9 @@ const App = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lang, setLang] = useState<Lang>('th');
+  const copy = UI_COPY[lang];
+  const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
 
   useScrollObserver();
 
@@ -327,7 +472,6 @@ const App = () => {
           setScrolled(window.scrollY > 20);
           
           // Smart active section detection
-          const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
           for (const section of sections) {
             const el = document.getElementById(section);
             if (el) {
@@ -346,6 +490,10 @@ const App = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const scrollTo = (id: string) => {
     setIsMenuOpen(false);
@@ -401,19 +549,19 @@ const App = () => {
                 P.
               </div>
               <div className="hidden sm:flex flex-col leading-tight gap-0.5">
-                <span className="font-bold text-white tracking-tight text-sm">Panupong Nijjaboon</span>
-                <span className="text-[10px] text-cyan-400 font-mono tracking-wide">System Engineer</span>
+                <span className="font-bold text-white tracking-tight text-sm">{lang === 'th' ? DATA.personal.nameTH : DATA.personal.nameEN}</span>
+                <span className="text-[10px] text-cyan-400 font-mono tracking-wide">{copy.roleMini}</span>
               </div>
             </div>
 
             {/* Desktop Nav */}
             <div className="hidden md:flex items-center space-x-1 bg-slate-950/50 p-1 rounded-full border border-slate-800/50 backdrop-blur-sm">
-              {['Home', 'About', 'Skills', 'Experience', 'Projects'].map((item) => (
+              {copy.nav.map((item, idx) => (
                 <button
                   key={item}
-                  onClick={() => scrollTo(item.toLowerCase())}
+                  onClick={() => scrollTo(sections[idx])}
                   className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ${
-                    activeSection === item.toLowerCase() 
+                    activeSection === sections[idx]
                       ? 'bg-slate-800 text-cyan-400 shadow-sm' 
                       : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
                   }`}
@@ -425,11 +573,26 @@ const App = () => {
 
             {/* CTA */}
             <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/80 px-2 py-1 text-xs font-mono text-slate-300">
+                <span className="text-slate-500">{copy.languageLabel}</span>
+                <button
+                  onClick={() => setLang('th')}
+                  className={`rounded-full px-2.5 py-1 transition-colors ${lang === 'th' ? 'bg-cyan-500 text-slate-950 font-bold' : 'hover:bg-slate-800'}`}
+                >
+                  TH
+                </button>
+                <button
+                  onClick={() => setLang('en')}
+                  className={`rounded-full px-2.5 py-1 transition-colors ${lang === 'en' ? 'bg-cyan-500 text-slate-950 font-bold' : 'hover:bg-slate-800'}`}
+                >
+                  EN
+                </button>
+              </div>
               <button 
                 onClick={() => scrollTo('contact')}
                 className="hidden md:flex items-center gap-2 px-5 py-2 bg-white text-slate-950 text-sm font-bold rounded-full hover:bg-cyan-50 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
               >
-                Hire Me
+                {copy.hireMe}
               </button>
               <button 
                 className="md:hidden text-slate-300 hover:text-white p-2" 
@@ -446,10 +609,19 @@ const App = () => {
         {isMenuOpen && (
           <div className="absolute top-full left-4 right-4 mt-2 p-2 bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl md:hidden animate-reveal z-50">
             <div className="flex flex-col">
-              {['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact'].map((item) => (
+              <div className="mb-2 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-2 text-xs font-mono text-slate-400">
+                <span>{copy.languageLabel}</span>
+                <button
+                  onClick={() => setLang((prev) => (prev === 'th' ? 'en' : 'th'))}
+                  className="rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-cyan-300"
+                >
+                  {lang === 'th' ? 'TH' : 'EN'}
+                </button>
+              </div>
+              {copy.mobileNav.map((item, idx) => (
                 <button
                   key={item}
-                  onClick={() => scrollTo(item.toLowerCase())}
+                  onClick={() => scrollTo(sections[idx])}
                   className="text-left px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-medium"
                 >
                   {item}
@@ -467,37 +639,37 @@ const App = () => {
           <div className="space-y-8 relative z-10 order-2 lg:order-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-cyan-500/30 text-cyan-400 text-xs font-mono tracking-wide animate-reveal opacity-0">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-              AVAILABLE FOR NEW OPPORTUNITIES
+              {copy.availability}
             </div>
             
             <div className="space-y-4 animate-reveal opacity-0" style={{ animationDelay: '100ms' }}>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] font-heading">
-                Bridging Security <br/>
+                {copy.heroTitleTop} <br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400">
-                  Operations
-                </span> With <br/>
-                Modern Engineering
+                  {copy.heroTitleMid}
+                </span> <br/>
+                {copy.heroTitleBottom}
               </h1>
               <p className="text-lg md:text-xl text-slate-400 max-w-xl leading-relaxed">
-                System Engineer & Security Architect. I build high-performance data pipelines, secure infrastructures, and next-gen SIEM platforms.
+                {copy.heroDesc}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-4 pt-4 animate-reveal opacity-0" style={{ animationDelay: '200ms' }}>
               <button onClick={() => scrollTo('projects')} className="group px-8 py-3.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(8,145,178,0.3)] flex items-center gap-2">
-                View Architecture <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {copy.viewArchitecture} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <button onClick={() => scrollTo('contact')} className="px-8 py-3.5 bg-slate-900/50 hover:bg-slate-800 text-white border border-slate-700 hover:border-slate-600 rounded-lg font-bold transition-all backdrop-blur-sm">
-                Contact Me
+                {copy.contactMe}
               </button>
             </div>
             
             <div className="pt-8 flex items-center gap-6 text-slate-500 font-mono text-xs sm:text-sm animate-reveal opacity-0" style={{ animationDelay: '300ms' }}>
-               <div className="flex items-center gap-2"><Shield size={14} className="text-violet-500"/> Cyber Security</div>
+               <div className="flex items-center gap-2"><Shield size={14} className="text-violet-500"/> {copy.chips[0]}</div>
                <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
-               <div className="flex items-center gap-2"><Database size={14} className="text-cyan-500"/> Big Data Ops</div>
+               <div className="flex items-center gap-2"><Database size={14} className="text-cyan-500"/> {copy.chips[1]}</div>
                <div className="w-1 h-1 bg-slate-800 rounded-full"></div>
-               <div className="flex items-center gap-2"><Code size={14} className="text-fuchsia-500"/> Full Stack</div>
+               <div className="flex items-center gap-2"><Code size={14} className="text-fuchsia-500"/> {copy.chips[2]}</div>
             </div>
           </div>
 
@@ -560,7 +732,7 @@ const App = () => {
           <div className="reveal-on-scroll opacity-0 translate-y-8">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold text-white mb-4 inline-flex items-center gap-3 font-heading">
-                <Terminal className="text-cyan-400" /> About Me
+                <Terminal className="text-cyan-400" /> {copy.about}
               </h2>
             </div>
             
@@ -570,13 +742,13 @@ const App = () => {
               
               <article className="prose prose-invert prose-lg max-w-none">
                 <p className="text-slate-300 leading-relaxed font-light text-lg">
-                  {DATA.summary}
+                  {t(DATA.summary, lang)}
                 </p>
               </article>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <div className="px-4 py-2 bg-slate-950 rounded-lg border border-slate-800 text-sm text-slate-400 flex items-center gap-2">
-                  <MapPin size={16} className="text-cyan-500"/> {DATA.personal.location}
+                  <MapPin size={16} className="text-cyan-500"/> {t(DATA.personal.location, lang)}
                 </div>
                 <div className="px-4 py-2 bg-slate-950 rounded-lg border border-slate-800 text-sm text-slate-400 flex items-center gap-2">
                   <Mail size={16} className="text-violet-500"/> {DATA.personal.email}
@@ -591,17 +763,17 @@ const App = () => {
       <section id="skills" className="py-24 px-4 bg-slate-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 reveal-on-scroll opacity-0 translate-y-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">Technical Skill</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">{copy.technicalSkill}</h2>
             <p className="text-slate-400 max-w-2xl mx-auto">
-              My expertise spans from low-level infrastructure to high-level application security.
+              {copy.technicalSkillDesc}
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <SkillCard title="Core Infrastructure" icon={Server} skills={DATA.skills.core} delay={0} />
-            <SkillCard title="Cybersecurity" icon={Shield} skills={DATA.skills.security} delay={100} />
-            <SkillCard title="Full Stack Dev" icon={Code} skills={DATA.skills.dev} delay={200} />
-            <SkillCard title="Data & DevOps" icon={Database} skills={DATA.skills.dataOps} delay={300} />
+            <SkillCard title={copy.skillTitles[0]} icon={Shield} skills={DATA.skills.core} delay={0} />
+            <SkillCard title={copy.skillTitles[1]} icon={Code} skills={DATA.skills.security} delay={100} />
+            <SkillCard title={copy.skillTitles[2]} icon={Server} skills={DATA.skills.dev} delay={200} />
+            <SkillCard title={copy.skillTitles[3]} icon={Database} skills={DATA.skills.dataOps} delay={300} />
           </div>
         </div>
       </section>
@@ -612,7 +784,7 @@ const App = () => {
           <div className="flex items-center gap-4 mb-16 reveal-on-scroll opacity-0 translate-y-8">
             <div className="h-px bg-slate-800 flex-grow"></div>
             <h2 className="text-3xl font-bold text-white flex items-center gap-3 font-heading">
-              <Award className="text-violet-400" /> Professional Journey
+              <Award className="text-violet-400" /> {copy.journey}
             </h2>
             <div className="h-px bg-slate-800 flex-grow"></div>
           </div>
@@ -665,14 +837,14 @@ const App = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 reveal-on-scroll opacity-0 translate-y-8 gap-4">
             <div>
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 font-heading">Key Projects</h2>
-              <p className="text-slate-400">Innovation meets Implementation</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 font-heading">{copy.projects}</h2>
+              <p className="text-slate-400">{copy.projectsDesc}</p>
             </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {DATA.projects.map((proj, idx) => (
-              <ProjectCard key={idx} project={proj} />
+              <ProjectCard key={idx} project={proj} actionLabel={copy.viewArchitecture} />
             ))}
           </div>
         </div>
@@ -684,7 +856,7 @@ const App = () => {
           
           <div className="reveal-on-scroll opacity-0 translate-y-8">
             <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2 font-heading">
-              <BookOpen className="text-cyan-400" /> Education
+              <BookOpen className="text-cyan-400" /> {copy.education}
             </h3>
             {DATA.education.map((edu, i) => (
               <div key={i} className="flex gap-4 items-start p-4 rounded-xl hover:bg-slate-900/50 transition-colors">
@@ -702,7 +874,7 @@ const App = () => {
 
           <div className="reveal-on-scroll opacity-0 translate-y-8" style={{ transitionDelay: '100ms' }}>
             <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2 font-heading">
-              <Lock className="text-violet-400" /> Certifications
+              <Lock className="text-violet-400" /> {copy.certifications}
             </h3>
             <div className="space-y-3">
               {DATA.certs.map((cert, i) => (
@@ -726,17 +898,16 @@ const App = () => {
             
             {/* Left Column: Image & Identity */}
             <div className="flex-shrink-0">
-              <ProfileImage />
+              <ProfileImage fallbackHint={lang === 'th' ? 'วางรูปภาพที่ public/' : 'Place image in public/'} />
             </div>
 
             {/* Right Column: Contact Details */}
             <div className="flex-grow text-center md:text-left">
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 font-heading">
-                Let's <span className="text-cyan-400">Collaborate</span>
+                {copy.lets} <span className="text-cyan-400">{copy.collaborate}</span>
               </h2>
               <p className="text-slate-400 mb-8 max-w-lg mx-auto md:mx-0">
-                Ready to secure your infrastructure or build the next-gen platform? 
-                I'm available for new opportunities and consulting.
+                {copy.contactDesc}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mb-8">
@@ -745,7 +916,7 @@ const App = () => {
                     <Mail size={20} />
                   </div>
                   <div className="text-left">
-                    <div className="text-xs text-slate-500 font-mono uppercase">Email Address</div>
+                    <div className="text-xs text-slate-500 font-mono uppercase">{copy.emailAddress}</div>
                     <div className="text-slate-200 font-medium">{DATA.personal.email}</div>
                   </div>
                 </a>
@@ -755,7 +926,7 @@ const App = () => {
                     <Phone size={20} />
                   </div>
                   <div className="text-left">
-                    <div className="text-xs text-slate-500 font-mono uppercase">Phone Number</div>
+                    <div className="text-xs text-slate-500 font-mono uppercase">{copy.phoneNumber}</div>
                     <div className="text-slate-200 font-medium">{DATA.personal.phone}</div>
                   </div>
                 </a>
@@ -774,10 +945,10 @@ const App = () => {
           </div>
 
           <footer className="mt-16 text-center text-slate-600 text-sm font-mono flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-900 pt-8">
-            <p>© 2025 Panupong Nijjaboon. All Rights Reserved.</p>
+            <p>© 2026 {lang === 'th' ? DATA.personal.nameTH : DATA.personal.nameEN}. {copy.rights}</p>
             <div className="flex items-center gap-2 text-xs">
                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-               System Status: Online
+              {copy.systemOnline}
             </div>
           </footer>
         </div>
