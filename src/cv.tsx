@@ -130,7 +130,7 @@ const DATA = {
   },
   summary: {
     th: "วิศวกรระบบและความปลอดภัยไซเบอร์ที่เชี่ยวชาญด้านการออกแบบสถาปัตยกรรม SOC และงานอัตโนมัติของโครงสร้างพื้นฐาน มีประสบการณ์บูรณาการโซลูชันความปลอดภัยระดับองค์กรกับ Active Directory และ Microsoft Graph API รวมถึงการจัดการ log ปริมาณสูงด้วย CrowdStrike LogScale และการพัฒนา playbook สำหรับการตอบสนองเหตุการณ์อัตโนมัติ",
-    en: "System and Cybersecurity Engineer specialized in SOC platform architecture and infrastructure automation. Expertise in integrating enterprise security solutions with Active Directory and Microsoft Graph API. Experienced in managing high-volume log ingestion using CrowdStrike LogScale and developing automated response playbooks. Specialized in designing secure, automated operational tools with unified identity management."
+    en: "System and Cybersecurity Engineer with a Full-stack Development background, specialized in SOC platform architecture and infrastructure automation. Expertise in integrating enterprise security solutions with Active Directory and Microsoft Graph API. Proficient in building end-to-end operational tools using modern frameworks (React, Node.js, Go), combined with experience in managing high-volume log ingestion using CrowdStrike LogScale. Passionate about bridging the gap between robust security and seamless automated workflows."
   },
 
   skills: {
@@ -419,7 +419,113 @@ const useScrollObserver = () => {
   }, []);
 };
 
+// Typewriter effect: cycles through an array of strings with type/delete animation
+const useTypewriter = (texts: string[], resetKey?: string, typingSpeed = 80, deletingSpeed = 40, pauseTime = 2500) => {
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const [phase, setPhase] = useState<'typing' | 'deleting'>('typing');
+
+  useEffect(() => {
+    setDisplayText('');
+    setTextIndex(0);
+    setPhase('typing');
+  }, [resetKey]);
+
+  useEffect(() => {
+    if (!texts.length) return;
+    const current = texts[textIndex % texts.length] ?? '';
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (phase === 'typing') {
+      if (displayText.length < current.length) {
+        timeout = setTimeout(() => setDisplayText(current.slice(0, displayText.length + 1)), typingSpeed);
+      } else {
+        timeout = setTimeout(() => setPhase('deleting'), pauseTime);
+      }
+    } else {
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => setDisplayText(displayText.slice(0, -1)), deletingSpeed);
+      } else {
+        setTextIndex((prev) => (prev + 1) % texts.length);
+        setPhase('typing');
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayText, phase, textIndex, texts, typingSpeed, deletingSpeed, pauseTime]);
+
+  return displayText;
+};
+
+// Terminal line-by-line animation: reveals lines one at a time, then loops
+const useTerminalAnimation = (lineCount: number, lineDelay = 320) => {
+  const [visibleLines, setVisibleLines] = useState(0);
+
+  useEffect(() => {
+    if (visibleLines < lineCount) {
+      const timer = setTimeout(() => setVisibleLines(v => v + 1), lineDelay);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => setVisibleLines(0), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleLines, lineCount, lineDelay]);
+
+  return visibleLines;
+};
+
 // --- COMPONENTS ---
+
+const TERMINAL_DATA = [
+  { label: '# Log Ingestion Pipeline', labelColor: 'text-slate-500', value: '' },
+  { label: 'source:', labelColor: 'text-violet-400', value: '' },
+  { label: '  type: ', labelColor: 'text-cyan-300', value: 'vector', valueColor: 'text-white' },
+  { label: '  port: ', labelColor: 'text-cyan-300', value: '8686', valueColor: 'text-yellow-300' },
+  { label: 'transforms:', labelColor: 'text-violet-400', value: '' },
+  { label: '  enrich: ', labelColor: 'text-cyan-300', value: '"geo_ip"', valueColor: 'text-green-400' },
+  { label: '  compress: ', labelColor: 'text-cyan-300', value: '"lz4"', valueColor: 'text-green-400' },
+  { label: 'sinks:', labelColor: 'text-violet-400', value: '' },
+  { label: '  hot_tier: ', labelColor: 'text-cyan-300', value: '"clickhouse"', valueColor: 'text-green-400' },
+  { label: '  cold_tier: ', labelColor: 'text-cyan-300', value: '"minio"', valueColor: 'text-green-400' },
+];
+
+const AnimatedTerminal = () => {
+  const visibleLines = useTerminalAnimation(TERMINAL_DATA.length, 320);
+  const isDone = visibleLines >= TERMINAL_DATA.length;
+
+  return (
+    <div className="w-72 bg-slate-950/90 backdrop-blur-xl border border-slate-800 rounded-lg p-5 shadow-2xl relative overflow-hidden hover:border-cyan-500/30 transition-colors">
+      {/* Mac-style window controls */}
+      <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-400 transition-colors"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70 hover:bg-yellow-400 transition-colors"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500/70 hover:bg-green-400 transition-colors"></div>
+        </div>
+        <div className="text-[10px] font-mono text-slate-500">pipeline.yml</div>
+      </div>
+
+      <div className="space-y-1.5 font-mono text-[11px] leading-relaxed min-h-[165px]">
+        {TERMINAL_DATA.slice(0, visibleLines).map((line, i) => (
+          <div key={i} className="flex items-baseline terminal-line-in">
+            <span className={line.labelColor}>{line.label}</span>
+            {line.value && <span className={line.valueColor}>{line.value}</span>}
+          </div>
+        ))}
+        {!isDone && (
+          <span className="inline-block w-1.5 h-3.5 bg-cyan-400 terminal-cursor align-middle"></span>
+        )}
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+        <div className={`flex items-center gap-2 text-[10px] transition-all duration-500 ${isDone ? 'text-green-400' : 'text-slate-600'}`}>
+          <div className={`w-1.5 h-1.5 rounded-full ${isDone ? 'bg-green-500 animate-pulse' : 'bg-slate-600'}`}></div>
+          {isDone ? 'Pipeline Active' : 'Initializing...'}
+        </div>
+        <span className="text-[10px] text-slate-600">{isDone ? '2.4M Events/s' : '---'}</span>
+      </div>
+    </div>
+  );
+};
 
 const BackgroundGrid = () => (
   <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-950">
@@ -575,7 +681,7 @@ const ProfileImage = ({ fallbackHint }: { fallbackHint: string }) => (
     <div className="relative w-full h-full bg-slate-900 rounded-xl border border-slate-700 overflow-hidden flex items-center justify-center">
        {/* Profile Image - Using Panupong.jpg */}
        <img 
-         src="/Panupong.jpg" 
+         src="/Profile.jpg" 
          alt="Panupong Nijjaboon - Security Architect" 
          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
          style={{ objectPosition: 'center 18%' }}
@@ -590,7 +696,7 @@ const ProfileImage = ({ fallbackHint }: { fallbackHint: string }) => (
                  <svg class="w-12 h-12 text-slate-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                  </svg>
-                 <span class="text-xs text-slate-500 font-mono">Panupong.jpg</span>
+                 <span class="text-xs text-slate-500 font-mono">Profile.jpg</span>
                  <span class="text-[10px] text-slate-600 mt-1">${fallbackHint}</span>
                </div>
              `;
@@ -613,6 +719,12 @@ const App = () => {
   const [lang, setLang] = useState<Lang>('en');
   const copy = UI_COPY[lang];
   const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+
+  // Typewriter for hero gradient title — cycles through related role terms
+  const heroRoleTitles = lang === 'en'
+    ? ['Operations', 'Automation', 'SIEM Platforms', 'SOC Architecture']
+    : ['ปฏิบัติการ', 'ระบบอัตโนมัติ', 'แพลตฟอร์ม SIEM', 'สถาปัตยกรรม SOC'];
+  const typedHeroRole = useTypewriter(heroRoleTitles, lang);
 
   useScrollObserver();
 
@@ -675,6 +787,10 @@ const App = () => {
         .animate-reveal { animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes reveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .animate-pulse-slow { animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .terminal-cursor { animation: blink 1s step-end infinite; }
+        @keyframes terminalLineIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+        .terminal-line-in { animation: terminalLineIn 0.15s ease-out forwards; }
       `}</style>
 
       {/* --- SEO META TAGS (Simulated) --- */}
@@ -696,16 +812,26 @@ const App = () => {
               : 'bg-transparent border-transparent'}
           `}>
             {/* Logo */}
-            <div 
-              className="flex items-center gap-2 cursor-pointer group" 
+            <div
+              className="flex items-center gap-3 cursor-pointer group relative"
               onClick={() => scrollTo('home')}
             >
-              <div className="w-9 h-9 bg-gradient-to-br from-cyan-600 to-violet-700 rounded-lg flex items-center justify-center text-white font-bold font-mono text-lg shadow-lg group-hover:rotate-12 transition-transform">
-                P.
+              {/* Badge with glow */}
+              <div className="relative flex-shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-lg blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-300 scale-125"></div>
+                <div className="relative w-9 h-9 bg-gradient-to-br from-cyan-600 to-violet-700 rounded-lg flex items-center justify-center text-white font-bold font-mono text-lg shadow-lg group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] transition-all duration-300">
+                  P.
+                </div>
               </div>
+              {/* Name & online indicator */}
               <div className="hidden sm:flex flex-col leading-tight gap-0.5">
-                <span className="font-bold text-white tracking-tight text-sm">{lang === 'th' ? DATA.personal.nameTH : DATA.personal.nameEN}</span>
-                <span className="text-[10px] text-cyan-400 font-mono tracking-wide">{copy.roleMini}</span>
+                <span className="font-bold text-white tracking-tight text-sm group-hover:text-cyan-300 transition-colors duration-200">
+                  {lang === 'th' ? DATA.personal.nameTH : DATA.personal.nameEN}
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_6px_rgba(74,222,128,0.7)]"></span>
+                  <span className="text-[10px] text-cyan-400 font-mono tracking-wide">{copy.roleMini}</span>
+                </div>
               </div>
             </div>
 
@@ -800,8 +926,9 @@ const App = () => {
             <div className="space-y-4 animate-reveal opacity-0" style={{ animationDelay: '100ms' }}>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] font-heading">
                 {copy.heroTitleTop} <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400">
-                  {copy.heroTitleMid}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 inline-flex items-baseline">
+                  {typedHeroRole || '\u00A0'}
+                  <span className="w-[3px] h-[0.85em] bg-gradient-to-b from-cyan-400 to-violet-400 inline-block ml-1 rounded-sm terminal-cursor"></span>
                 </span> <br/>
                 {copy.heroTitleBottom}
               </h1>
@@ -836,40 +963,9 @@ const App = () => {
               <div className="absolute inset-12 border border-slate-800/30 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
               <div className="absolute inset-24 border border-cyan-500/20 rounded-full animate-[spin_10s_linear_infinite] border-dashed"></div>
               
-              {/* Central Code Block */}
+              {/* Central Code Block — Animated Terminal */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-72 bg-slate-950/90 backdrop-blur-xl border border-slate-800 rounded-lg p-5 shadow-2xl relative overflow-hidden group hover:border-cyan-500/30 transition-colors">
-                  <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                    </div>
-                    <div className="text-[10px] font-mono text-slate-500">pipeline.yml</div>
-                  </div>
-                  
-                  <div className="space-y-1.5 font-mono text-[11px] leading-relaxed">
-                    <div className="text-slate-500"># Log Ingestion Pipeline</div>
-                    <div><span className="text-violet-400">source</span>:</div>
-                    <div className="pl-4 text-cyan-300">type: <span className="text-white">vector</span></div>
-                    <div className="pl-4 text-cyan-300">port: <span className="text-yellow-300">8686</span></div>
-                    
-                    <div><span className="text-violet-400">transforms</span>:</div>
-                    <div className="pl-4 text-cyan-300">enrich: <span className="text-green-400">"geo_ip"</span></div>
-                    <div className="pl-4 text-cyan-300">compress: <span className="text-green-400">"lz4"</span></div>
-
-                    <div><span className="text-violet-400">sinks</span>:</div>
-                    <div className="pl-4 text-cyan-300">hot_tier: <span className="text-green-400">"clickhouse"</span></div>
-                    <div className="pl-4 text-cyan-300">cold_tier: <span className="text-green-400">"minio"</span></div>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-                     <div className="flex items-center gap-2 text-[10px] text-green-400">
-                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                        Pipeline Active
-                     </div>
-                     <span className="text-[10px] text-slate-600">2.4M Events/s</span>
-                  </div>
-                </div>
+                <AnimatedTerminal />
               </div>
             </div>
           </div>
