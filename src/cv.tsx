@@ -456,41 +456,71 @@ const useTypewriter = (texts: string[], resetKey?: string, typingSpeed = 80, del
   return displayText;
 };
 
-// Terminal line-by-line animation: reveals lines one at a time, then loops
-const useTerminalAnimation = (lineCount: number, lineDelay = 320) => {
-  const [visibleLines, setVisibleLines] = useState(0);
+type TerminalLine = {
+  text: string;
+  color: string;
+};
+
+// Terminal typing animation: types each command character-by-character, line-by-line, then loops.
+const useTerminalTyper = (
+  script: TerminalLine[],
+  typingMin = 18,
+  typingMax = 46,
+  linePause = 450,
+  loopPause = 1800,
+) => {
+  const [completedLines, setCompletedLines] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
 
   useEffect(() => {
-    if (visibleLines < lineCount) {
-      const timer = setTimeout(() => setVisibleLines(v => v + 1), lineDelay);
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => setVisibleLines(0), 4000);
+    if (!script.length) return;
+    let timer: ReturnType<typeof setTimeout>;
+
+    if (completedLines >= script.length) {
+      timer = setTimeout(() => {
+        setCompletedLines(0);
+        setTypedChars(0);
+      }, loopPause);
       return () => clearTimeout(timer);
     }
-  }, [visibleLines, lineCount, lineDelay]);
 
-  return visibleLines;
+    const currentLine = script[completedLines]?.text ?? '';
+    if (typedChars < currentLine.length) {
+      const speed = Math.floor(Math.random() * (typingMax - typingMin + 1)) + typingMin;
+      timer = setTimeout(() => setTypedChars((prev) => prev + 1), speed);
+      return () => clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      setCompletedLines((prev) => prev + 1);
+      setTypedChars(0);
+    }, linePause);
+    return () => clearTimeout(timer);
+  }, [completedLines, typedChars, script, typingMin, typingMax, linePause, loopPause]);
+
+  return { completedLines, typedChars, isComplete: completedLines >= script.length };
 };
 
 // --- COMPONENTS ---
 
-const TERMINAL_DATA = [
-  { label: '# Log Ingestion Pipeline', labelColor: 'text-slate-500', value: '' },
-  { label: 'source:', labelColor: 'text-violet-400', value: '' },
-  { label: '  type: ', labelColor: 'text-cyan-300', value: 'vector', valueColor: 'text-white' },
-  { label: '  port: ', labelColor: 'text-cyan-300', value: '8686', valueColor: 'text-yellow-300' },
-  { label: 'transforms:', labelColor: 'text-violet-400', value: '' },
-  { label: '  enrich: ', labelColor: 'text-cyan-300', value: '"geo_ip"', valueColor: 'text-green-400' },
-  { label: '  compress: ', labelColor: 'text-cyan-300', value: '"lz4"', valueColor: 'text-green-400' },
-  { label: 'sinks:', labelColor: 'text-violet-400', value: '' },
-  { label: '  hot_tier: ', labelColor: 'text-cyan-300', value: '"clickhouse"', valueColor: 'text-green-400' },
-  { label: '  cold_tier: ', labelColor: 'text-cyan-300', value: '"minio"', valueColor: 'text-green-400' },
+const TERMINAL_SCRIPT: TerminalLine[] = [
+  { text: '$ socctl auth --provider "active-directory"', color: 'text-cyan-300' },
+  { text: '[ok] identity mapped: panupong.nijjaboon', color: 'text-emerald-400' },
+  { text: '$ socctl ingest --source crowdstrike-logscale --rate 2400000', color: 'text-cyan-300' },
+  { text: '[ok] vector pipeline -> clickhouse (hot) / minio (cold)', color: 'text-emerald-400' },
+  { text: '$ socctl playbook run ransomware-auto-isolate --host ws-fin-223', color: 'text-cyan-300' },
+  { text: '[done] host isolated in 1.8s', color: 'text-violet-300' },
+  { text: '$ graph-sync schedule --calendar outlook --notify teams', color: 'text-cyan-300' },
+  { text: '[ok] microsoft graph workflow synced', color: 'text-emerald-400' },
+  { text: '$ n8n trigger incident-bridge --channel secops', color: 'text-cyan-300' },
+  { text: '[ok] secops automation deployed', color: 'text-emerald-400' },
 ];
 
 const AnimatedTerminal = () => {
-  const visibleLines = useTerminalAnimation(TERMINAL_DATA.length, 320);
-  const isDone = visibleLines >= TERMINAL_DATA.length;
+  const { completedLines, typedChars, isComplete } = useTerminalTyper(TERMINAL_SCRIPT);
+  const activeLine = TERMINAL_SCRIPT[completedLines];
+  const windowStart = Math.max(0, completedLines - 5);
+  const visibleCompleted = TERMINAL_SCRIPT.slice(windowStart, completedLines);
 
   return (
     <div className="w-72 bg-slate-950/90 backdrop-blur-xl border border-slate-800 rounded-lg p-5 shadow-2xl relative overflow-hidden hover:border-cyan-500/30 transition-colors">
@@ -505,23 +535,26 @@ const AnimatedTerminal = () => {
       </div>
 
       <div className="space-y-1.5 font-mono text-[11px] leading-relaxed min-h-[165px]">
-        {TERMINAL_DATA.slice(0, visibleLines).map((line, i) => (
-          <div key={i} className="flex items-baseline terminal-line-in">
-            <span className={line.labelColor}>{line.label}</span>
-            {line.value && <span className={line.valueColor}>{line.value}</span>}
+        {visibleCompleted.map((line, i) => (
+          <div key={`${line.text}-${i}`} className={`terminal-line-in ${line.color}`}>
+            {line.text}
           </div>
         ))}
-        {!isDone && (
-          <span className="inline-block w-1.5 h-3.5 bg-cyan-400 terminal-cursor align-middle"></span>
+
+        {!isComplete && activeLine && (
+          <div className={`terminal-line-in ${activeLine.color}`}>
+            {activeLine.text.slice(0, typedChars)}
+            <span className="inline-block w-1.5 h-3.5 bg-cyan-400 terminal-cursor align-middle ml-0.5"></span>
+          </div>
         )}
       </div>
 
       <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-        <div className={`flex items-center gap-2 text-[10px] transition-all duration-500 ${isDone ? 'text-green-400' : 'text-slate-600'}`}>
-          <div className={`w-1.5 h-1.5 rounded-full ${isDone ? 'bg-green-500 animate-pulse' : 'bg-slate-600'}`}></div>
-          {isDone ? 'Pipeline Active' : 'Initializing...'}
+        <div className={`flex items-center gap-2 text-[10px] transition-all duration-500 ${isComplete ? 'text-green-400' : 'text-slate-600'}`}>
+          <div className={`w-1.5 h-1.5 rounded-full ${isComplete ? 'bg-green-500 animate-pulse' : 'bg-cyan-500 terminal-dot'}`}></div>
+          {isComplete ? 'Automation Live' : 'Typing Commands...'}
         </div>
-        <span className="text-[10px] text-slate-600">{isDone ? '2.4M Events/s' : '---'}</span>
+        <span className="text-[10px] text-slate-600">{isComplete ? 'SOC Ready' : 'Editing'}</span>
       </div>
     </div>
   );
