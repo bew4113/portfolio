@@ -557,7 +557,8 @@ const TERMINAL_SCRIPT: TerminalLine[] = [
 const AnimatedTerminal = () => {
   const { completedLines, typedChars, isComplete } = useTerminalTyper(TERMINAL_SCRIPT);
   const activeLine = TERMINAL_SCRIPT[completedLines];
-  const windowStart = Math.max(0, completedLines - 8);
+  const maxVisibleLines = 7;
+  const windowStart = Math.max(0, completedLines - (maxVisibleLines - 1));
   const visibleCompleted = TERMINAL_SCRIPT.slice(windowStart, completedLines);
 
   return (
@@ -580,15 +581,15 @@ const AnimatedTerminal = () => {
         <span className="text-cyan-300">branch: main</span>
       </div>
 
-      <div className="relative z-10 space-y-1.5 font-mono text-[11px] sm:text-[12px] leading-6 h-[248px] overflow-hidden pb-2">
+      <div className="relative z-10 space-y-1.5 font-mono text-[11px] sm:text-[12px] leading-6 h-[248px] overflow-hidden pb-3 pr-1">
         {visibleCompleted.map((line, i) => (
-          <div key={`${line.text}-${i}`} className={`terminal-line-in ${line.color}`}>
+          <div key={`${line.text}-${i}`} className={`terminal-line-in ${line.color} whitespace-nowrap overflow-hidden text-ellipsis`}>
             {line.text}
           </div>
         ))}
 
         {!isComplete && activeLine && (
-          <div className={`terminal-line-in ${activeLine.color}`}>
+          <div className={`terminal-line-in ${activeLine.color} whitespace-nowrap overflow-hidden text-ellipsis`}>
             {activeLine.text.slice(0, typedChars)}
             <span className="inline-block w-1.5 h-[1em] bg-cyan-400 terminal-cursor align-middle ml-0.5 rounded-[2px]"></span>
           </div>
