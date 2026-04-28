@@ -504,37 +504,48 @@ const useTerminalTyper = (
 // --- COMPONENTS ---
 
 const TERMINAL_SCRIPT: TerminalLine[] = [
-  { text: '$ socctl auth --provider "active-directory"', color: 'text-cyan-300' },
-  { text: '[ok] identity mapped: panupong.nijjaboon', color: 'text-emerald-400' },
-  { text: '$ socctl ingest --source crowdstrike-logscale --rate 2400000', color: 'text-cyan-300' },
-  { text: '[ok] vector pipeline -> clickhouse (hot) / minio (cold)', color: 'text-emerald-400' },
-  { text: '$ socctl playbook run ransomware-auto-isolate --host ws-fin-223', color: 'text-cyan-300' },
-  { text: '[done] host isolated in 1.8s', color: 'text-violet-300' },
-  { text: '$ graph-sync schedule --calendar outlook --notify teams', color: 'text-cyan-300' },
-  { text: '[ok] microsoft graph workflow synced', color: 'text-emerald-400' },
-  { text: '$ n8n trigger incident-bridge --channel secops', color: 'text-cyan-300' },
-  { text: '[ok] secops automation deployed', color: 'text-emerald-400' },
+  { text: '# pipeline.yml | SOC AI Production', color: 'text-slate-500' },
+  { text: 'identity_provider: active_directory', color: 'text-violet-300' },
+  { text: 'log_source: crowdstrike_logscale', color: 'text-violet-300' },
+  { text: 'routing.hot: clickhouse', color: 'text-violet-300' },
+  { text: 'routing.cold: minio', color: 'text-violet-300' },
+  { text: 'playbook: ransomware_auto_isolate', color: 'text-violet-300' },
+  { text: '$ socctl validate --file pipeline.yml --env production', color: 'text-cyan-300' },
+  { text: '[ok] schema check passed (12 rules)', color: 'text-emerald-400' },
+  { text: '$ socctl deploy --stack secops-core --region ap-southeast-1', color: 'text-cyan-300' },
+  { text: '[ok] microsoft-graph sync channel connected', color: 'text-emerald-400' },
+  { text: '$ n8n trigger incident-bridge --channel secops --priority high', color: 'text-cyan-300' },
+  { text: '[live] ingestion 2.4M events/s | p95: 184ms', color: 'text-fuchsia-300' },
+  { text: '[done] SOC automation pipeline online', color: 'text-emerald-400' },
 ];
 
 const AnimatedTerminal = () => {
   const { completedLines, typedChars, isComplete } = useTerminalTyper(TERMINAL_SCRIPT);
   const activeLine = TERMINAL_SCRIPT[completedLines];
-  const windowStart = Math.max(0, completedLines - 5);
+  const windowStart = Math.max(0, completedLines - 8);
   const visibleCompleted = TERMINAL_SCRIPT.slice(windowStart, completedLines);
 
   return (
-    <div className="w-72 bg-slate-950/90 backdrop-blur-xl border border-slate-800 rounded-lg p-5 shadow-2xl relative overflow-hidden hover:border-cyan-500/30 transition-colors">
+    <div className="w-[22rem] sm:w-[26rem] lg:w-[30rem] bg-slate-950/95 backdrop-blur-xl border border-slate-700/90 rounded-2xl p-5 sm:p-6 shadow-[0_30px_80px_rgba(2,6,23,0.85)] relative overflow-hidden transition-all duration-500 hover:border-cyan-400/45 hover:-translate-y-1 terminal-shell-glow">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(34,211,238,0.12),transparent_40%),radial-gradient(circle_at_85%_90%,rgba(168,85,247,0.12),transparent_45%)] pointer-events-none"></div>
+      <div className="absolute inset-0 terminal-scanline pointer-events-none"></div>
+
       {/* Mac-style window controls */}
-      <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
-        <div className="flex gap-1.5">
+      <div className="relative z-10 flex items-center justify-between mb-3 border-b border-slate-800/90 pb-3">
+        <div className="flex gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-400 transition-colors"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70 hover:bg-yellow-400 transition-colors"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/70 hover:bg-green-400 transition-colors"></div>
         </div>
-        <div className="text-[10px] font-mono text-slate-500">pipeline.yml</div>
+        <div className="text-[10px] sm:text-xs font-mono text-slate-400">pipeline.yml</div>
       </div>
 
-      <div className="space-y-1.5 font-mono text-[11px] leading-relaxed min-h-[165px]">
+      <div className="relative z-10 mb-4 rounded-lg border border-slate-800/80 bg-slate-900/50 px-3 py-2 flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
+        <span className="text-slate-400">secops/soc-ai/pipeline.yml</span>
+        <span className="text-cyan-300">branch: main</span>
+      </div>
+
+      <div className="relative z-10 space-y-1.5 font-mono text-[11px] sm:text-[12px] leading-relaxed min-h-[230px] max-h-[230px] overflow-hidden">
         {visibleCompleted.map((line, i) => (
           <div key={`${line.text}-${i}`} className={`terminal-line-in ${line.color}`}>
             {line.text}
@@ -549,12 +560,12 @@ const AnimatedTerminal = () => {
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
-        <div className={`flex items-center gap-2 text-[10px] transition-all duration-500 ${isComplete ? 'text-green-400' : 'text-slate-600'}`}>
+      <div className="relative z-10 mt-4 pt-3 border-t border-slate-800/90 flex items-center justify-between">
+        <div className={`flex items-center gap-2 text-[10px] sm:text-[11px] transition-all duration-500 ${isComplete ? 'text-green-400' : 'text-slate-500'}`}>
           <div className={`w-1.5 h-1.5 rounded-full ${isComplete ? 'bg-green-500 animate-pulse' : 'bg-cyan-500 terminal-dot'}`}></div>
           {isComplete ? 'Automation Live' : 'Typing Commands...'}
         </div>
-        <span className="text-[10px] text-slate-600">{isComplete ? 'SOC Ready' : 'Editing'}</span>
+        <span className="text-[10px] sm:text-[11px] text-slate-500">{isComplete ? 'SOC Ready' : 'Editing pipeline.yml'}</span>
       </div>
     </div>
   );
@@ -824,6 +835,19 @@ const App = () => {
         .terminal-cursor { animation: blink 1s step-end infinite; }
         @keyframes terminalLineIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
         .terminal-line-in { animation: terminalLineIn 0.15s ease-out forwards; }
+        @keyframes terminalDot { 0%, 100% { transform: scale(1); opacity: 0.55; } 50% { transform: scale(1.45); opacity: 1; } }
+        .terminal-dot { animation: terminalDot 1s ease-in-out infinite; }
+        @keyframes terminalScan { 0% { transform: translateY(-110%); } 100% { transform: translateY(140%); } }
+        .terminal-scanline {
+          background: linear-gradient(180deg, transparent 0%, rgba(34,211,238,0.09) 45%, rgba(34,211,238,0.16) 50%, rgba(34,211,238,0.09) 55%, transparent 100%);
+          animation: terminalScan 5.5s linear infinite;
+        }
+        .terminal-shell-glow {
+          box-shadow:
+            0 22px 50px rgba(2, 6, 23, 0.68),
+            inset 0 0 0 1px rgba(148, 163, 184, 0.06),
+            inset 0 0 80px rgba(15, 23, 42, 0.65);
+        }
       `}</style>
 
       {/* --- SEO META TAGS (Simulated) --- */}
@@ -990,7 +1014,7 @@ const App = () => {
 
           {/* Hero Graphic - TENCYBER Architecture Viz */}
           <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end animate-reveal opacity-0" style={{ animationDelay: '400ms' }}>
-            <div className="relative w-full max-w-md aspect-square">
+            <div className="relative w-full max-w-[38rem] aspect-[4/3]">
               {/* Animated Rings */}
               <div className="absolute inset-0 border border-slate-800/30 rounded-full animate-[spin_30s_linear_infinite]"></div>
               <div className="absolute inset-12 border border-slate-800/30 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
