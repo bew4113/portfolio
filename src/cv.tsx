@@ -464,8 +464,7 @@ type TerminalLine = {
 // Terminal typing animation: types each command character-by-character, line-by-line, then loops.
 const useTerminalTyper = (
   script: TerminalLine[],
-  typingMin = 18,
-  typingMax = 46,
+  typingSpeed = 26,
   linePause = 450,
   loopPause = 1800,
 ) => {
@@ -486,8 +485,7 @@ const useTerminalTyper = (
 
     const currentLine = script[completedLines]?.text ?? '';
     if (typedChars < currentLine.length) {
-      const speed = Math.floor(Math.random() * (typingMax - typingMin + 1)) + typingMin;
-      timer = setTimeout(() => setTypedChars((prev) => prev + 1), speed);
+      timer = setTimeout(() => setTypedChars((prev) => prev + 1), typingSpeed);
       return () => clearTimeout(timer);
     }
 
@@ -496,7 +494,7 @@ const useTerminalTyper = (
       setTypedChars(0);
     }, linePause);
     return () => clearTimeout(timer);
-  }, [completedLines, typedChars, script, typingMin, typingMax, linePause, loopPause]);
+  }, [completedLines, typedChars, script, typingSpeed, linePause, loopPause]);
 
   return { completedLines, typedChars, isComplete: completedLines >= script.length };
 };
@@ -504,19 +502,21 @@ const useTerminalTyper = (
 // --- COMPONENTS ---
 
 const TERMINAL_SCRIPT: TerminalLine[] = [
-  { text: '# pipeline.yml | SOC AI Production', color: 'text-slate-500' },
-  { text: 'identity_provider: active_directory', color: 'text-violet-300' },
-  { text: 'log_source: crowdstrike_logscale', color: 'text-violet-300' },
-  { text: 'routing.hot: clickhouse', color: 'text-violet-300' },
-  { text: 'routing.cold: minio', color: 'text-violet-300' },
-  { text: 'playbook: ransomware_auto_isolate', color: 'text-violet-300' },
-  { text: '$ socctl validate --file pipeline.yml --env production', color: 'text-cyan-300' },
-  { text: '[ok] schema check passed (12 rules)', color: 'text-emerald-400' },
-  { text: '$ socctl deploy --stack secops-core --region ap-southeast-1', color: 'text-cyan-300' },
-  { text: '[ok] microsoft-graph sync channel connected', color: 'text-emerald-400' },
-  { text: '$ n8n trigger incident-bridge --channel secops --priority high', color: 'text-cyan-300' },
-  { text: '[live] ingestion 2.4M events/s | p95: 184ms', color: 'text-fuchsia-300' },
-  { text: '[done] SOC automation pipeline online', color: 'text-emerald-400' },
+  { text: '# pipeline.yml', color: 'text-slate-500' },
+  { text: '$ vector validate /etc/vector/vector.yaml', color: 'text-cyan-300' },
+  { text: 'Validated /etc/vector/vector.yaml', color: 'text-emerald-400' },
+  { text: '$ docker compose -f docker-compose.soc.yml up -d vector clickhouse minio', color: 'text-cyan-300' },
+  { text: '[+] Running 3/3', color: 'text-emerald-400' },
+  { text: '$ docker exec clickhouse clickhouse-client -q "SELECT count() FROM siem.logs"', color: 'text-cyan-300' },
+  { text: 'count(): 2439812', color: 'text-fuchsia-300' },
+  { text: '$ mc alias set soc http://127.0.0.1:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY', color: 'text-cyan-300' },
+  { text: "Added `soc` successfully.", color: 'text-emerald-400' },
+  { text: '$ mc ls soc/log-archive/', color: 'text-cyan-300' },
+  { text: '[2026-04-28 09:10:31]  14GiB STANDARD secops/', color: 'text-violet-300' },
+  { text: '$ pwsh -Command "Connect-MgGraph -Scopes \"User.Read.All,Mail.Send\""', color: 'text-cyan-300' },
+  { text: 'Welcome to Microsoft Graph!', color: 'text-emerald-400' },
+  { text: '$ n8n start', color: 'text-cyan-300' },
+  { text: 'Editor is now accessible via: http://localhost:5678', color: 'text-emerald-400' },
 ];
 
 const AnimatedTerminal = () => {
@@ -545,7 +545,7 @@ const AnimatedTerminal = () => {
         <span className="text-cyan-300">branch: main</span>
       </div>
 
-      <div className="relative z-10 space-y-1.5 font-mono text-[11px] sm:text-[12px] leading-relaxed min-h-[230px] max-h-[230px] overflow-hidden">
+      <div className="relative z-10 space-y-1.5 font-mono text-[11px] sm:text-[12px] leading-6 h-[248px] overflow-hidden pb-2">
         {visibleCompleted.map((line, i) => (
           <div key={`${line.text}-${i}`} className={`terminal-line-in ${line.color}`}>
             {line.text}
@@ -555,7 +555,7 @@ const AnimatedTerminal = () => {
         {!isComplete && activeLine && (
           <div className={`terminal-line-in ${activeLine.color}`}>
             {activeLine.text.slice(0, typedChars)}
-            <span className="inline-block w-1.5 h-3.5 bg-cyan-400 terminal-cursor align-middle ml-0.5"></span>
+            <span className="inline-block w-1.5 h-[1em] bg-cyan-400 terminal-cursor align-middle ml-0.5 rounded-[2px]"></span>
           </div>
         )}
       </div>
@@ -563,9 +563,9 @@ const AnimatedTerminal = () => {
       <div className="relative z-10 mt-4 pt-3 border-t border-slate-800/90 flex items-center justify-between">
         <div className={`flex items-center gap-2 text-[10px] sm:text-[11px] transition-all duration-500 ${isComplete ? 'text-green-400' : 'text-slate-500'}`}>
           <div className={`w-1.5 h-1.5 rounded-full ${isComplete ? 'bg-green-500 animate-pulse' : 'bg-cyan-500 terminal-dot'}`}></div>
-          {isComplete ? 'Automation Live' : 'Typing Commands...'}
+          {isComplete ? 'Automation Live' : 'Running Real Commands...'}
         </div>
-        <span className="text-[10px] sm:text-[11px] text-slate-500">{isComplete ? 'SOC Ready' : 'Editing pipeline.yml'}</span>
+        <span className="text-[10px] sm:text-[11px] text-slate-500">{isComplete ? 'SOC Ready' : 'pipeline.yml'}</span>
       </div>
     </div>
   );
@@ -831,16 +831,16 @@ const App = () => {
         .animate-reveal { animation: reveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes reveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .animate-pulse-slow { animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .terminal-cursor { animation: blink 1s step-end infinite; }
+        @keyframes blinkSoft { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0.2; } }
+        .terminal-cursor { animation: blinkSoft 1.2s ease-in-out infinite; }
         @keyframes terminalLineIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
         .terminal-line-in { animation: terminalLineIn 0.15s ease-out forwards; }
         @keyframes terminalDot { 0%, 100% { transform: scale(1); opacity: 0.55; } 50% { transform: scale(1.45); opacity: 1; } }
         .terminal-dot { animation: terminalDot 1s ease-in-out infinite; }
         @keyframes terminalScan { 0% { transform: translateY(-110%); } 100% { transform: translateY(140%); } }
         .terminal-scanline {
-          background: linear-gradient(180deg, transparent 0%, rgba(34,211,238,0.09) 45%, rgba(34,211,238,0.16) 50%, rgba(34,211,238,0.09) 55%, transparent 100%);
-          animation: terminalScan 5.5s linear infinite;
+          background: linear-gradient(180deg, transparent 0%, rgba(34,211,238,0.05) 45%, rgba(34,211,238,0.09) 50%, rgba(34,211,238,0.05) 55%, transparent 100%);
+          animation: terminalScan 9s linear infinite;
         }
         .terminal-shell-glow {
           box-shadow:
